@@ -1,0 +1,22 @@
+{
+  "name": "Blockstarter",
+  "description": "Node.js + Ethereum",
+  "author": "Group S",
+  "version": "0.0.1",
+  "main": "src/cli.js",
+  "scripts": {
+    "dev": "nodemon src/cli.js",
+    "prod": "node src/cli.js",
+    "start": "npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "commander": "^2.9.0",
+    "jsonfile": "^3.0.0",
+    "prompt": "^1.0.0",
+    "web3": "^0.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
