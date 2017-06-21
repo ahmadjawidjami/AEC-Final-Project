@@ -14,8 +14,8 @@
 
 
 ## Tasks 
-- Project contract: withdraw funds (only owner)
-- Project contract: claim project shares (only backers)
+- Project contract: withdraw funds (only owner) [DONE]
+- Project contract: claim project shares (only backers) [DONE]
 - List projects View 
 - Login View 
 - Back a Project View 
