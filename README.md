@@ -13,15 +13,25 @@
 - Slack WebHook for commit notitifations
 
 
-## Tasks 
-- Project contract: withdraw funds (only owner) [DONE]
-- Project contract: claim project shares (only backers) [DONE]
-- List projects View 
-- Login View 
-- Back a Project View 
-- Create a Project View 
+## Tasks (16; 2 done, 2 in progress, 12 todo)
+- Project contract: withdraw funds (only owner) [<span style="color:green">DONE</span>] [@filippoboiani]
+- Project contract: claim project shares (only backers) [<span style="color:green">DONE</span>] [@filippoboiani]
+- Create a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
+- Show Project Info API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - List Projects API 
 - Login API (passport)  
 - Back a Project API
-- Create a Project API 
+- Withdraw funds API 
+- Show Share API 
+- Kill project API 
+- Login View 
+- List projects View 
+- Create a Project View 
+- Project Info View
+- Back a Project View 
+- Shares View 
+- Kill Project View
+
+
+
 
