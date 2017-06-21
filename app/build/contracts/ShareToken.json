@@ -1,0 +1,26 @@
+{
+  "contract_name": "ShareToken",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "receiver",
+          "type": "address"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x60606040523415600b57fe5b5b606f8061001a6000396000f300606060405263ffffffff60e060020a600035041663a9059cbb81146020575bfe5b3415602757fe5b603c600160a060020a0360043516602435603e565b005b5b50505600a165627a7a72305820e85a2e660db2a2944f4f77ee3db5a09c7e1db4063bce8941eb699ac1cea357090029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1498075350108
+}
