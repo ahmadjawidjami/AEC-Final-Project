@@ -1,7 +1,0 @@
-{
-  "client": "http://localhost:8545",
-  "sender": "0x5798482Adc61C647a39Bf64E89416A81A9Fc592d",
-  "password": "cloudcomputing",
-  "projectAddress": "0x450586d4267247db4566600ea3e0d5fb6bb0cdbe",
-  "projectAddressBack": "0xfe4fa69bf7d529f95d41388d113a73ad1d26c9c3"
-}
