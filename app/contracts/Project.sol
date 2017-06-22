@@ -35,12 +35,13 @@ contract Project {
     bool private goalReached; 
     bool private withdrawn; 
     ShareToken public token; 
-    uint public price;
+    uint public availableTokens;
     
     // Utility struct
     struct Backer {
         uint amount;  
         bool exists; 
+        bool claimed;
     }
 
     // Support array used to iterate over the mapping 
@@ -52,21 +53,37 @@ contract Project {
         if (msg.sender == owner) _;
     }
 
+    modifier onlyAllowedBacker() {
+        if (fundings[msg.sender].exists && !fundings[msg.sender].claimed) _;
+    }
+
+    modifier campaingOpen() {
+        if (!goalReached) _;
+    }
+
+    modifier campaingClosed() {
+        if (goalReached) _;
+    }
+
     // Constructor
-    function Project(string _title, string _description, uint _fundingGoal, uint _etherValueOfToken, ShareToken _tokenAdress) {
+    function Project(string _title, string _description, uint _fundingGoal, uint _availableTokens, ShareToken _tokenAdress) {
         owner = msg.sender;
         title = _title; 
         description = _description; 
         fundingGoal = _fundingGoal * 1 ether; 
-        price = _etherValueOfToken * 1 ether;
+        availableTokens = _availableTokens;
         token = ShareToken(_tokenAdress);
     }
 
     // Set all the parameters
-    function setParams(string _title, string _description, uint _fundingGoal) {
+    function setParams(string _title, string _description, uint _fundingGoal) onlyOwner {
         title = _title; 
         description = _description; 
         fundingGoal = _fundingGoal; 
+    }
+
+    function getInfo() constant returns(string, string, uint, uint, bool) {
+        return(title, description, fundingGoal, fundingStatus, goalReached);
     }
 
     // Shows the status of the project
@@ -93,8 +110,13 @@ contract Project {
          
     }
 
-    // Evaulate whether it is necessary
-    function reclaimToken() returns(bool){
+    // Claim shares
+    function claimShares() campaingClosed onlyAllowedBacker returns(bool)  {
+        address sender = msg.sender;
+        // set the claimed field true
+        fundings[sender].claimed = true; 
+        // give the token to the backer 
+        token.transfer(sender, fundings[sender].amount/fundingStatus * availableTokens);
         return false; 
     }
 
@@ -110,7 +132,7 @@ contract Project {
     }
 
     // Fallback function (send money)
-    function() payable {
+    function() payable campaingOpen {
 
         uint amount = msg.value * 1 ether; 
         address sender = msg.sender; 
@@ -118,18 +140,17 @@ contract Project {
         if (fundings[sender].exists) {
             fundings[sender].amount += amount; 
         } else {
-            fundings[sender] = Backer(amount, true);
+            fundings[sender] = Backer(amount, true, false);
             iterator.push(sender); 
         }
         
         fundingStatus += amount; 
         goalReached = (fundingStatus >= fundingGoal) && (fundingGoal > 0); 
-        // give the token to the backer 
-        token.transfer(sender, amount / price);
         SomeoneBacked(sender, amount, goalReached);
     }
 
     // Events
     event SomeoneBacked(address backer, uint amount, bool goalReached);
+    event ShareClaimed(address backer, uint tokens);
     event WithdrawnFunds(bool successful, uint fundsLeft);
 }

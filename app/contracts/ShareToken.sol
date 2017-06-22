@@ -27,8 +27,8 @@ contract ProejctShare {
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
     function ProejctShare(uint256 _initialSupply, string _tokenName, uint8 _decimalUnits, string _tokenSymbol) {
-        if (_initialSupply == 0) _initialSupply = 100 * 1 ether; 
-        balanceOf[msg.sender] = _initialSupply * 1 ether;    // Give the creator all initial tokens
+        if (_initialSupply == 0) _initialSupply = 100; 
+        balanceOf[msg.sender] = _initialSupply;    // Give the creator all initial tokens
         name = _tokenName;                                   // Set the name for display purposes
         symbol = _tokenSymbol;                               // Set the symbol for display purposes
         decimals = _decimalUnits;                            // Amount of decimals for display purposes

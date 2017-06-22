@@ -89,4 +89,19 @@ module.exports = (app) => {
         });
 
     });
+
+    //Show project informations 
+    app.get('/api/v1/projects/:project', function(req, res, next) {
+        console.log(req.method + " on " + req.originalUrl);
+
+        interactor.getProject(req.params, (error, result) => {
+            if (!error)
+                res.send(result);
+            else
+                res.send(error);
+        });
+
+    });
+
+
 }
