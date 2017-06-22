@@ -51,21 +51,24 @@ module.exports = (web3) => {
         var time2 = null;
 
         // deploy the contract
+        // TODO: change creator
         console.log(`Start deploying project ${data.title}...`);
         var project = projectContract.new(data.title, data.description, data.goal, data.price, data.token, {
             from: web3.eth.accounts[0],
             data: contractData.unlinked_binary,
             gas: '4700000'
         }, function(e, c) {
-            // console.log(e, c);
+
             if (e)
                 callback(e, undefined);
 
             if (typeof c.address !== 'undefined') {
-                //console.log('Contract mined! address:' + c.address);
+
                 time2 = Date.now();
-                //console.log(`Contract deployed in ${(time2 - time1) / 1000} seconds`);
+
+                // TODO: change creator
                 var result = {
+                    creator: web3.eth.accounts[0],
                     address: c.address,
                     time: (time2 - time1) / 1000,
                     instance: c

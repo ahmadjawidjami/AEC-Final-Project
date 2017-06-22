@@ -2,13 +2,11 @@ var path = require("path");
 var jsonfile = require("jsonfile");
 const exec = require('child_process').exec;
 var config = require("../resources/config");
-console.log(__dirname);
-console.log(path.resolve(__dirname, config.projectsFile));
-// console.log(process.env);
 var projects = jsonfile.readFileSync(path.resolve(__dirname, config.projectsFile));
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider());
 
+// TODO: delete it when Docker is set up
 try {
     if (!web3.net.listening)
         throw false;
@@ -26,12 +24,17 @@ try {
         });
 }
 
-
+// Controllers 
 var deployer = require("./deploy")(web3);
 var interactor = require("./interaction")(web3);
 
+// TODO: move it in API v2 
+const Creator = require('../models/creators');
+const Backer = require('../models/backers');
+
 module.exports = (app) => {
     console.info("API running...");
+
     // Get Hello World
     app.get('/api/v1/', function(req, res, next) {
         console.log(req.method + " on " + req.originalUrl);
@@ -62,8 +65,21 @@ module.exports = (app) => {
             console.log(`Token created in ${result.time} seconds`)
             deployer.deployContract(project, (error, result) => {
 
-                projects.list.push({ project: result.address, token: project.token });
-                jsonfile.writeFileSync(path.resolve(__dirname, config.projectsFile), projects);
+                // write to a JSON file
+                // projects.list.push({ project: result.address, token: project.token });
+                // jsonfile.writeFileSync(path.resolve(__dirname, config.projectsFile), projects);
+
+                console.log(`Inserting ${project.title} into ${result.creator} projects list`);
+                //write to mongoDB
+                Creator.findByIdAndUpdate(
+                    result.creator, { $push: { "projects": { title: result.address, token: project.token } } }, { safe: true, upsert: true },
+                    function(err, model) {
+                        console.log(err);
+                        console.log(model);
+                    }
+
+                );
+
                 var r = `Project ${project.title} with address ${result.address} created in ${result.time} seconds\n`;
                 console.log(r);
                 res.send(r);
