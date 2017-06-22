@@ -42,7 +42,7 @@ module.exports = (app) => {
     });
 
     // TODO: Change route
-    app.get('/api/v1/deploy', function(req, res, next) {
+    app.post('/api/v1/projects', function(req, res, next) {
         console.log(req.method + " on " + req.originalUrl);
 
         var token = {
@@ -72,7 +72,7 @@ module.exports = (app) => {
                 console.log(`Inserting ${project.title} into ${result.creator} projects list`);
                 //write to mongoDB
                 Creator.findByIdAndUpdate(
-                    result.creator, { $push: { "projects": { title: result.address, token: project.token } } }, { safe: true, upsert: true },
+                    result.creator, { $push: { "projects": { address: result.address, token: project.token } } }, { safe: true, upsert: true },
                     function(err, model) {
                         console.log(err);
                         console.log(model);
@@ -88,16 +88,53 @@ module.exports = (app) => {
     });
 
     // Fund a project 
-    app.post('/api/v1/fund', function(req, res, next) {
+    // TODO: change mongo call in API v2 
+    app.post('/api/v1/projects/fund', function(req, res, next) {
         console.log(req.method + " on " + req.originalUrl);
+
         interactor.fundProject(req.body, (error, result) => {
             res.send(result);
+            Backer.findByIdAndUpdate(
+                req.body.backer, { $push: { "projects": { address: req.body.project } } }, { safe: true, upsert: true },
+                function(err, model) {
+                    console.log(err);
+                    console.log(model);
+                }
+
+            );
         });
 
     });
 
+    // Get all projects
+    app.get('/api/v1/projects', function(req, res, next) {
+        console.log(req.method + " on " + req.originalUrl);
+        // TODO: implement list all
+        // interactor.showStatus(req.params, (error, result) => {
+        //     res.send(`Goal ${result[0]}, amount raised: ${result[1]}, goalReached: ${result[2]}\n`);
+        // });
+    });
+
+    // Get all projects created by a creator
+    app.get('/api/v1/projects/creator/:creator', function(req, res, next) {
+        console.log(req.method + " on " + req.originalUrl);
+        // TODO: implement list all
+        // interactor.showStatus(req.params, (error, result) => {
+        //     res.send(`Goal ${result[0]}, amount raised: ${result[1]}, goalReached: ${result[2]}\n`);
+        // });
+    });
+
+    // Get all projects funded by a backer
+    app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
+        console.log(req.method + " on " + req.originalUrl);
+        // TODO: implement list all
+        // interactor.showStatus(req.params, (error, result) => {
+        //     res.send(`Goal ${result[0]}, amount raised: ${result[1]}, goalReached: ${result[2]}\n`);
+        // });
+    });
+
     //Show project status 
-    app.get('/api/v1/status/:project', function(req, res, next) {
+    app.get('/api/v1/projects/status/:project', function(req, res, next) {
         console.log(req.method + " on " + req.originalUrl);
 
         interactor.showStatus(req.params, (error, result) => {
@@ -116,7 +153,6 @@ module.exports = (app) => {
             else
                 res.send(error);
         });
-
     });
 
 

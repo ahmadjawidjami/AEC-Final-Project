@@ -10,21 +10,28 @@
 # Tools 
 - Slack for communication
 - GitLab for VCS
-- Slack WebHook for commit notitifations
+- Slack WebHook for commit notifications 
 
 
-## Tasks (17; 2 done, 4 in progress, 11 todo)
+## Tasks (24; 6 done, 8 in progress, 10 todo)
 - Project contract: withdraw funds (only owner) [<span style="color:green">DONE</span>] [@filippoboiani]
 - Project contract: claim project shares (only backers) [<span style="color:green">DONE</span>] [@filippoboiani]
+- MongoDB Connection [<span style="color:green">DONE</span>] [@filippoboiani]
+- MongoDB Schema Definition [<span style="color:green">DONE</span>] [@filippoboiani]
 - Create a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Show Project Info API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - List Projects API 
+- List Created Project API
+- List Backed Project API
 - Login API (passport)  
 - Back a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
-- Withdraw funds API 
+- Withdraw funds API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
+- Get Project API [<span style="color:green">DONE</span>] [@filippoboiani]
+- Show Status API [<span style="color:green">DONE</span>] [@filippoboiani]
+- Claim Shares API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Show Share API 
-- Kill project API 
-- Login View 
+- Kill project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
+- Login View [<span style="color:orange">IN PROGRESS</span>] [@riccardosibani]
 - List projects View [<span style="color:orange">IN PROGRESS</span>] [@riccardosibani]
 - Create a Project View 
 - Project Info View
