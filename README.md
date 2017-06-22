@@ -13,7 +13,7 @@
 - Slack WebHook for commit notitifations
 
 
-## Tasks (16; 2 done, 2 in progress, 12 todo)
+## Tasks (17; 2 done, 4 in progress, 11 todo)
 - Project contract: withdraw funds (only owner) [<span style="color:green">DONE</span>] [@filippoboiani]
 - Project contract: claim project shares (only backers) [<span style="color:green">DONE</span>] [@filippoboiani]
 - Create a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
