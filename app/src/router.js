@@ -1,19 +1,41 @@
-var deployer = require("./deploy");
-var interactor = require("./interaction");
+var path = require("path");
+var jsonfile = require("jsonfile");
+const exec = require('child_process').exec;
+var config = require("../resources/config");
+console.log(__dirname);
+console.log(path.resolve(__dirname, config.projectsFile));
+// console.log(process.env);
+var projects = jsonfile.readFileSync(path.resolve(__dirname, config.projectsFile));
+var Web3 = require('web3');
+var web3 = new Web3(new Web3.providers.HttpProvider());
 
-var fund = {
-    backer: "address",
-    project: "address",
-    amount: "amount"
+try {
+    if (!web3.net.listening)
+        throw false;
 
+} catch (error) {
+    console.log("No blockchain client listening");
+    exec(path.resolve(__dirname, config.script),
+        function(error, stdout, stderr) {
+            console.log("TestRPC started");
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (error !== null) {
+                console.log('exec error: ' + error);
+            }
+        });
 }
+
+
+var deployer = require("./deploy")(web3);
+var interactor = require("./interaction")(web3);
 
 module.exports = (app) => {
     console.info("API running...");
     // Get Hello World
     app.get('/api/v1/', function(req, res, next) {
         console.log(req.method + " on " + req.originalUrl);
-        res.send("Hello, this is group S (Boiani, Sibani, Stojkovski, Vilén)!\n");
+        res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén, [Other Group])!\n");
     });
 
     // TODO: Change route
@@ -39,6 +61,9 @@ module.exports = (app) => {
             project.token = result.address;
             console.log(`Token created in ${result.time} seconds`)
             deployer.deployContract(project, (error, result) => {
+
+                projects.list.push({ project: result.address, token: project.token });
+                jsonfile.writeFileSync(path.resolve(__dirname, config.projectsFile), projects);
                 var r = `Project ${project.title} with address ${result.address} created in ${result.time} seconds\n`;
                 console.log(r);
                 res.send(r);
@@ -60,7 +85,7 @@ module.exports = (app) => {
         console.log(req.method + " on " + req.originalUrl);
 
         interactor.showStatus(req.params, (error, result) => {
-            res.send(`Amount raised: ${result[0]}, goalReached: ${result[1]}\n`);
+            res.send(`Goal ${result[0]}, amount raised: ${result[1]}, goalReached: ${result[2]}\n`);
         });
 
     });

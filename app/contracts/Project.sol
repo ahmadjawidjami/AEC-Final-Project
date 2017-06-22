@@ -31,7 +31,7 @@ contract Project {
     string public title; 
     string public description; 
     uint public fundingGoal; 
-    uint public fundingStatus; 
+    uint private fundingStatus; 
     bool private goalReached; 
     bool private withdrawn; 
     ShareToken public token; 
@@ -70,14 +70,15 @@ contract Project {
     }
 
     // Shows the status of the project
-    function showStatus() constant returns(uint, bool){
-        return(fundingStatus, goalReached);
+    function showStatus() constant returns(uint, uint, bool){
+        return(fundingGoal, fundingStatus, goalReached);
     }
 
     // Withdraw funds
     function withdraw(uint _amount) onlyOwner {
         assert(goalReached);
         // Get the funds 
+        _amount = _amount * 1 ether; 
         if (_amount <= fundingStatus) {
             withdrawn = true; 
             fundingStatus -= _amount; 
@@ -111,7 +112,7 @@ contract Project {
     // Fallback function (send money)
     function() payable {
 
-        uint amount = msg.value; 
+        uint amount = msg.value * 1 ether; 
         address sender = msg.sender; 
         
         if (fundings[sender].exists) {

@@ -25,7 +25,10 @@ let showStatus = (data, callback) => {
 
 }
 
-module.exports = {
-    fundProject: fundProject,
-    showStatus: showStatus
+// Export the function
+module.exports = (web3) => {
+    return {
+        fundProject: fundProject,
+        showStatus: showStatus
+    };
 }
