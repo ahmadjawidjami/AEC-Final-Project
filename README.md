@@ -20,12 +20,12 @@
 - Show Project Info API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - List Projects API 
 - Login API (passport)  
-- Back a Project API
+- Back a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Withdraw funds API 
 - Show Share API 
 - Kill project API 
 - Login View 
-- List projects View 
+- List projects View [<span style="color:orange">IN PROGRESS</span>] [@riccardosibani]
 - Create a Project View 
 - Project Info View
 - Back a Project View 
