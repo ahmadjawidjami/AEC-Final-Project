@@ -20,3 +20,4 @@ shell-server@0.2.3            # Server-side component of the `meteor shell` comm
 accounts-password
 react-meteor-data
 twbs:bootstrap
+ultimatejs:tracker-react

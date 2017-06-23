@@ -14,10 +14,14 @@ if (Meteor.isServer) {
 }
 
 Meteor.methods({
-    'projects.create'(title, description, fundingGoal) {
+    'project.create'(title, description, fundingGoal) {
         check(title, String);
         check(description, String);
-        check(fundingGoal, Match.Integer);
+        check(fundingGoal, Number);
+
+        if (title === '') {
+            throw new Error('Not possible. Please add the title');
+        }
 
         if(!Meteor.userId()) {
             throw new Meteor.Error('Not Authorized. Please log in');
@@ -27,6 +31,8 @@ Meteor.methods({
             title,
             description,
             fundingGoal,
+            fundingRaised: 0,
+            owner: Meteor.userId(),
             createdAt: new Date,
         });
     },
