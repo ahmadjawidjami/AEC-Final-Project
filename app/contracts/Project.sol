@@ -36,6 +36,8 @@ contract Project {
     bool private withdrawn; 
     ShareToken public token; 
     uint public availableTokens;
+    // v 2.0 extension 
+    uint public deadline; 
     
     // Utility struct
     struct Backer {
@@ -66,12 +68,13 @@ contract Project {
     }
 
     // Constructor
-    function Project(string _title, string _description, uint _fundingGoal, uint _availableTokens, ShareToken _tokenAdress) {
+    function Project(string _title, string _description, uint _fundingGoal, uint _availableTokens, ShareToken _tokenAdress, uint _campaignDuration) {
         owner = msg.sender;
         title = _title; 
         description = _description; 
         fundingGoal = _fundingGoal * 1 ether; 
         availableTokens = _availableTokens;
+        deadline = now + _campaignDuration * 1 minutes; 
         token = ShareToken(_tokenAdress);
     }
 
@@ -91,6 +94,15 @@ contract Project {
         return(fundingGoal, fundingStatus, goalReached);
     }
 
+    function check() onlyOwner returns(bool result) {
+        result = false; 
+        if(!goalReached && now > deadline) {
+            kill();
+        } else {
+            result = true; 
+        }
+    }
+
     // Withdraw funds
     function withdraw(uint _amount) onlyOwner {
         assert(goalReached);
@@ -99,11 +111,8 @@ contract Project {
         if (_amount <= fundingStatus) {
             withdrawn = true; 
             fundingStatus -= _amount; 
-            if( owner.send(_amount) ) {
-                WithdrawnFunds(true, fundingStatus); // return the fundingStatus after the withdraw
-            } else {
-                throw; 
-            }
+            owner.transfer(_amount);
+            WithdrawnFunds(true, fundingStatus); // return the fundingStatus after the withdraw 
         } else {
             throw; 
         }
@@ -126,7 +135,7 @@ contract Project {
         // Give back the money to all the backers 
         for (uint i=0; i< iterator.length; i++) {
             address key = iterator[i]; 
-            key.send(fundings[key].amount);
+            key.transfer(fundings[key].amount);
         }
         selfdestruct(msg.sender);
     }
