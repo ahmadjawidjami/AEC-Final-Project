@@ -20,10 +20,10 @@
 - MongoDB Schema Definition [<span style="color:green">DONE</span>] [@filippoboiani]
 - Create a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Show Project Info API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
-- List Projects API 
-- List Created Project API
-- List Backed Project API
-- Login API (passport)  
+- List Projects API [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- List Created Project API [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- List Backed Project API [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- Login API (passport) [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
 - Back a Project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Withdraw funds API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Get Project API [<span style="color:green">DONE</span>] [@filippoboiani]
@@ -31,13 +31,13 @@
 - Claim Shares API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
 - Show Share API 
 - Kill project API [<span style="color:orange">IN PROGRESS</span>] [@filippoboiani]
-- Login View [<span style="color:orange">IN PROGRESS</span>] [@riccardosibani]
-- List projects View [<span style="color:orange">IN PROGRESS</span>] [@riccardosibani]
-- Create a Project View 
-- Project Info View
-- Back a Project View 
-- Shares View 
-- Kill Project View
+- Login View [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- List projects View [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- Create a Project View [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- Project Info View [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- Back a Project View [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
+- Shares View WHAT IS THIS?
+- Kill Project View [<span style="color:orange">IN PROGRESS on branch Meteor</span>] [@riccardosibani]
 
 
 
