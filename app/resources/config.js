@@ -1,7 +1,9 @@
 module.exports = {
-    client: "testrpc",
+    client: "geth", // testrpc
     clientUrl: "http://localhost:8545",
     projectsFile: "../resources/projects.json",
     defaultTokenName: "Shares",
-    script: "../resources/start.sh"
+    script: `../resources/${client}.sh`, // testrpc.sh
+    account: "",
+    pwd: ""
 }
