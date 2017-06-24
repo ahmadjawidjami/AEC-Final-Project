@@ -57,11 +57,11 @@ contract Project {
         if (fundings[msg.sender].exists && !fundings[msg.sender].claimed) _;
     }
 
-    modifier campaingOpen() {
+    modifier campaignOpen() {
         if (!goalReached) _;
     }
 
-    modifier campaingClosed() {
+    modifier campaignClosed() {
         if (goalReached) _;
     }
 
@@ -111,7 +111,7 @@ contract Project {
     }
 
     // Claim shares
-    function claimShares() campaingClosed onlyAllowedBacker returns(bool)  {
+    function claimShares() campaignClosed onlyAllowedBacker returns(bool)  {
         address sender = msg.sender;
         // set the claimed field true
         fundings[sender].claimed = true; 
@@ -132,7 +132,7 @@ contract Project {
     }
 
     // Fallback function (send money)
-    function() payable campaingOpen {
+    function() payable campaignOpen {
 
         uint amount = msg.value * 1 ether; 
         address sender = msg.sender; 
