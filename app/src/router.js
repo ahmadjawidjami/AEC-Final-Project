@@ -45,47 +45,51 @@ module.exports = (app) => {
     app.post('/api/v1/projects', function(req, res, next) {
         console.log(req.method + " on " + req.originalUrl);
 
-        var token = {
-            initialSupply: 10,
-            tokenName: "Test Token",
-            tokenSymbol: "PS",
-            decimals: 4
+        // Mockup request
+        let request = {
+            token: {
+                initialSupply: 10,
+                tokenName: "Test Token",
+                tokenSymbol: "PS",
+                decimals: 4,
+                creator: web3.eth.accounts[0]
+            },
+            project: {
+                title: "Test Title",
+                description: "Frist Project With Token",
+                goal: 10,
+                duration: 10, //minutes
+                price: 2,
+                creator: web3.eth.accounts[0]
+            }
         }
 
-        var project = {
-            title: "Test Title",
-            description: "Frist Project With Token",
-            goal: 10,
-            price: 2,
-            token: "todo..."
-        }
-
-        deployer.createToken(token, (error, result) => {
-            project.token = result.address;
+        deployer.createToken(request.token, (error, result) => {
+            request.project.token = result.address;
             console.log(`Token created in ${result.time} seconds`)
-            deployer.deployContract(project, (error, result) => {
+            deployer.createProject(request.project, (error, result) => {
 
                 // write to a JSON file
                 // projects.list.push({ project: result.address, token: project.token });
                 // jsonfile.writeFileSync(path.resolve(__dirname, config.projectsFile), projects);
 
-                console.log(`Inserting ${project.title} into ${result.creator} projects list`);
+                console.log(`Inserting ${reques.project.title} into ${result.creator} projects list`);
                 //write to mongoDB
                 Creator.findByIdAndUpdate(
-                    result.creator, { $push: { "projects": { address: result.address, token: project.token } } }, { safe: true, upsert: true },
+                    result.creator, { $push: { "projects": { address: result.address, token: project.token, deadline: new Date().setTime(new Date().getTime() + (request.project.duration * 60 * 1000)) } } }, { safe: true, upsert: true },
                     function(err, model) {
                         console.log(err);
                         console.log(model);
                     }
-
                 );
 
-                var r = `Project ${project.title} with address ${result.address} created in ${result.time} seconds\n`;
+                var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
                 console.log(r);
                 res.send(r);
             });
         });
     });
+
 
     // Fund a project 
     // TODO: change mongo call in API v2 

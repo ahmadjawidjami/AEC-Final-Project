@@ -32,12 +32,16 @@ contract Project {
     string public description; 
     uint public fundingGoal; 
     uint private fundingStatus; 
+    uint private finalFundings; 
+    
     bool private goalReached; 
     bool private withdrawn; 
     ShareToken public token; 
     uint public availableTokens;
     // v 2.0 extension 
     uint public deadline; 
+    string public fundingStart; 
+    string public fundingEnd;
     
     // Utility struct
     struct Backer {
@@ -85,8 +89,8 @@ contract Project {
         fundingGoal = _fundingGoal; 
     }
 
-    function getInfo() constant returns(string, string, uint, uint, bool) {
-        return(title, description, fundingGoal, fundingStatus, goalReached);
+    function getInfo() constant returns(string, string, uint, uint, uint, bool) {
+        return(title, description, fundingGoal, fundingStatus, finalFundings, goalReached);
     }
 
     // Shows the status of the project
@@ -125,7 +129,7 @@ contract Project {
         // set the claimed field true
         fundings[sender].claimed = true; 
         // give the token to the backer 
-        token.transfer(sender, fundings[sender].amount/fundingStatus * availableTokens);
+        token.transfer(sender, fundings[sender].amount/finalFundings * availableTokens);
         return false; 
     }
 
@@ -154,6 +158,7 @@ contract Project {
         }
         
         fundingStatus += amount; 
+        finalFundings += amount; 
         goalReached = (fundingStatus >= fundingGoal) && (fundingGoal > 0); 
         SomeoneBacked(sender, amount, goalReached);
     }

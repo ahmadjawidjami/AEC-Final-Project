@@ -1,5 +1,6 @@
-var contractData = require("../build/contracts/Project.json");
-var tokenData = require("../build/contracts/ProejctShare.json");
+var projectContract = require("../build/contracts/Project.json");
+var tokenContract = require("../build/contracts/ProejctShare.json");
+
 // Unlock the account
 // let unlockAccount = () => {
 //     console.log(`Unlocking account ${web3.eth.accounts[0]}...`);
@@ -10,76 +11,90 @@ var tokenData = require("../build/contracts/ProejctShare.json");
 // Export the function
 module.exports = (web3) => {
 
-    let createToken = (data, callback) => {
-        var token = web3.eth.contract(tokenData.abi);
+    let createToken = data => {
 
-        // start a timer
-        var time1 = Date.now();
-        var time2 = null;
+        return new Promise((resolve, reject) => {
 
-        // deploy the contract
-        console.log(`Start creating token ${data.tokenName}...`);
-        var shares = token.new(data.initialSupply, data.tokenName, data.decimals, data.tokenSymbol, {
-            from: web3.eth.accounts[0],
-            data: tokenData.unlinked_binary,
-            gas: '4700000'
-        }, function(e, c) {
-            // console.log(e, c);
-            if (e)
-                callback(e, undefined);
+            // start a timer
+            time.start();
+            console.log(`Start creating token ${data.tokenName}...`);
 
-            if (typeof c.address !== 'undefined') {
-                //console.log('Contract mined! address:' + c.address);
-                time2 = Date.now();
+            // deploy the contract
+            web3.eth
+                .contract(tokenContract.abi)
+                .new(data.initialSupply, data.tokenName, data.decimals, data.tokenSymbol, {
+                    from: data.creator,
+                    data: tokenContract.unlinked_binary,
+                    gas: '4700000'
+                }, function(error, contract) {
+                    // console.log(e, c);
+                    if (error)
+                        reject(error);
 
-                var result = {
-                    address: c.address,
-                    time: (time2 - time1) / 1000,
-                    instance: c
-                }
-                callback(undefined, result)
-            }
-        });
+                    if (typeof contract.address !== 'undefined') {
 
-    }
+                        let result = {
+                            address: contract.address,
+                            time: time.stop(),
+                            instance: contract
+                        }
 
-    let deployContract = (data, callback) => {
-        var projectContract = web3.eth.contract(contractData.abi);
-
-        // start a timer
-        var time1 = Date.now();
-        var time2 = null;
-
-        // deploy the contract
-        // TODO: change creator
-        console.log(`Start deploying project ${data.title}...`);
-        var project = projectContract.new(data.title, data.description, data.goal, data.price, data.token, {
-            from: web3.eth.accounts[0],
-            data: contractData.unlinked_binary,
-            gas: '4700000'
-        }, function(e, c) {
-
-            if (e)
-                callback(e, undefined);
-
-            if (typeof c.address !== 'undefined') {
-
-                time2 = Date.now();
-
-                // TODO: change creator
-                var result = {
-                    creator: web3.eth.accounts[0],
-                    address: c.address,
-                    time: (time2 - time1) / 1000,
-                    instance: c
-                }
-                callback(undefined, result)
-            }
+                        resolve(result)
+                    }
+                });
         });
     }
+
+    let createProject = data => {
+
+        return new Promise((resolve, reject) => {
+            // start a timer
+            time.start();
+            console.log(`Start deploying project ${data.title}...`);
+
+            // deploy the contract
+            // TODO: change creator
+            web3.eth
+                .contract(projectContract.abi)
+                .new(data.title, data.description, data.goal, data.price, data.token, data.duration, {
+                    from: data.creator,
+                    data: projectContract.unlinked_binary,
+                    gas: '4700000'
+                }, function(error, contract) {
+
+                    if (error)
+                        reject(error);
+
+                    if (typeof contract.address !== 'undefined') {
+                        // TODO: change creator
+                        var result = {
+                            creator: web3.eth.accounts[0],
+                            address: contract.address,
+                            time: time.stop(),
+                            instance: contract
+                        }
+                        resolve(result)
+                    }
+                });
+        });
+    }
+
+    let time = (function() {
+        this.startTime = null;
+        this.stopTime = null;
+        return {
+            start: () => {
+                this.startTime = Date.now();
+            },
+            stop: () => {
+                this.stopTime = Date.now();
+                return (this.stopTime - this.startTime) / 1000;
+            }
+        };
+    }());
 
     return {
-        deployContract: deployContract,
+        createProject: createProject,
         createToken: createToken
     };
 }
