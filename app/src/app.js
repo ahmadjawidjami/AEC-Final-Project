@@ -58,7 +58,7 @@ try {
 
 // import the router 
 // require('./router.js')(app);
-require('./router2.js')(app, web3);
+require('./router.js')(app, web3);
 
 app.listen(LOCAL_APP_PORT, () => {
     console.log("\n\n\n");
