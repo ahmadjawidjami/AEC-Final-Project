@@ -130,7 +130,7 @@ module.exports = (app, web3) => {
         logRequest(req);
         // TODO: must be implemented
 
-        CreatorDB.getProjectsBy(req.params.creator).then(
+        CreatorDB.getProjectsByAddress(req.params.creator).then(
             result => res.send(result))
             .catch(error => res.send(error));
 

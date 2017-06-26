@@ -7,15 +7,18 @@ module.exports = class Database {
     getAll() {
         return this.Model.find();
     }
-
     update(data, query) {
         return this.Model.findByIdAndUpdate(data, query, { safe: true, upsert: true });
     }
 
-    getProjectsBy(address){
-        return this.Model.find({
+    getProjectsByAddress(address){
+       let result = this.Model.find({
             _id: address
-        }).select('projects');
+        }).select('projects -_id');
+
+       return result;
     }
+
+
 
 }
