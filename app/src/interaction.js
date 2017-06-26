@@ -24,18 +24,18 @@ module.exports = (web3) => {
             let someoneBacked = getProjectContract(data).SomeoneBacked({ fromBlock: 0, toBlock: 'latest' });
 
             // fund the project
-            web3.eth.sendTransaction({ from: data.backer, to: data.address, value: data.amount, gas: 500000 });
+            web3.eth.sendTransaction({ from: data.backer, to: data.project, value: data.amount, gas: 500000 });
 
             // start watching for the funding event
-            someoneBacked
-                .watch()
-                .then(result => {
-                    // stop the watcher, we have the result
+            someoneBacked.watch((error, result) => {
+                if (error) {
                     someoneBacked.stopWatching();
+                    reject(error);
+                } else {
                     resolve(result);
+                }
+            });
 
-                })
-                .catch(error => { reject(error); });
         });
     }
 

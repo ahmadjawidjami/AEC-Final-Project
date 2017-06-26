@@ -19,8 +19,7 @@ module.exports = (app, web3) => {
     // Get Hello World
     app.get('/api/v1/', function(req, res, next) {
         logRequest(req);
-        // TODO: write your names! 
-        res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén [MISSING NAMES])!\n");
+        res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén, Jamiulahmadi, Akhlaqi, Ayobi, Sajid)!\n");
     });
 
     // TODO: Change route
@@ -46,9 +45,6 @@ module.exports = (app, web3) => {
                 creator: web3.eth.accounts[0]
             }
         }
-
-        Promise.all([deployer.createToken(request.token), deployer.createProject(request.project)])
-
         deployer
             .createToken(request.token)
             .then(result => {
@@ -103,7 +99,7 @@ module.exports = (app, web3) => {
 
                 // write on db
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html
-                CreatorDB
+                BackerDB
                     .update(backer, query)
                     .then(result => console.log(result))
                     .catch(error => console.log(error));
@@ -117,19 +113,18 @@ module.exports = (app, web3) => {
     });
 
     // Get all projects
-    Meteor.methods({
-        'projects.getAll' (id) {
-            logRequest(req);
-            // TODO: must be implemented
+    app.get('/api/v1/projects', function(req, res, next) {
+        logRequest(req);
+        // TODO: must be implemented
 
-            // example...
-            CreatorDB
-                .getAll()
-                .then(result => res.send(result))
-                .catch(error => res.send(error));
+        // example...
+        CreatorDB
+            .getAll()
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
 
-        }
-    })
+    });
+
     app.get('/api/v1/projects', function(req, res, next) {
 
     });
@@ -138,6 +133,12 @@ module.exports = (app, web3) => {
     app.get('/api/v1/projects/creator/:creator', function(req, res, next) {
         logRequest(req);
         // TODO: must be implemented
+        let data = { _id: req.params.creator }
+        CreatorDB
+            .getProjectsByAddress(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+
     });
 
     // Get all projects funded by a backer
