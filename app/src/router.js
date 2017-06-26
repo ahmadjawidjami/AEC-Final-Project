@@ -117,15 +117,20 @@ module.exports = (app, web3) => {
     });
 
     // Get all projects
-    app.get('/api/v1/projects', function(req, res, next) {
-        logRequest(req);
-        // TODO: must be implemented
+    Meteor.methods({
+        'projects.getAll' (id) {
+            logRequest(req);
+            // TODO: must be implemented
 
-        // example...
-        CreatorDB
-            .getAll()
-            .then(result => res.send(result))
-            .catch(error => res.send(error));
+            // example...
+            CreatorDB
+                .getAll()
+                .then(result => res.send(result))
+                .catch(error => res.send(error));
+
+        }
+    })
+    app.get('/api/v1/projects', function(req, res, next) {
 
     });
 
