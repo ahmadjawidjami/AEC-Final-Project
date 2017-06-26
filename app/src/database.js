@@ -12,7 +12,10 @@ module.exports = class Database {
         return this.Model.findByIdAndUpdate(data, query, { safe: true, upsert: true });
     }
 
-
-
+    getProjectsBy(address){
+        return this.Model.find({
+            _id: address
+        }).select('projects');
+    }
 
 }

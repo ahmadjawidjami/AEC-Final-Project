@@ -17,14 +17,13 @@ module.exports = (app, web3) => {
     console.info("API running...");
 
     // Get Hello World
-    app.get('/api/v1/', function(req, res, next) {
+    app.get('/api/v1/', function (req, res, next) {
         logRequest(req);
-        // TODO: write your names! 
-        res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén [MISSING NAMES])!\n");
+        res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén, Jamiulahmadi, Akhlaqi, Ayobi, Sajid)!\n");
     });
 
     // TODO: Change route
-    app.post('/api/v1/projects', function(req, res, next) {
+    app.post('/api/v1/projects', function (req, res, next) {
         logRequest(req);
 
         // Mockup request
@@ -46,9 +45,6 @@ module.exports = (app, web3) => {
                 creator: web3.eth.accounts[0]
             }
         }
-
-        Promise.all([deployer.createToken(request.token), deployer.createProject(request.project)])
-
         deployer
             .createToken(request.token)
             .then(result => {
@@ -89,7 +85,7 @@ module.exports = (app, web3) => {
 
     // Fund a project 
     // TODO: change mongo call in API v2 
-    app.post('/api/v1/projects/fund', function(req, res, next) {
+    app.post('/api/v1/projects/fund', function (req, res, next) {
 
         logRequest(req);
 
@@ -99,11 +95,11 @@ module.exports = (app, web3) => {
             .fundProject(funding)
             .then(result => {
                 let backer = req.body.backer;
-                let query = { $push: { "projects": { address: funding.project } } };
+                let query = {$push: {"projects": {address: funding.project}}};
 
                 // write on db
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html
-                CreatorDB
+                BackerDB
                     .update(backer, query)
                     .then(result => console.log(result))
                     .catch(error => console.log(error));
@@ -117,7 +113,7 @@ module.exports = (app, web3) => {
     });
 
     // Get all projects
-    app.get('/api/v1/projects', function(req, res, next) {
+    app.get('/api/v1/projects', function (req, res, next) {
         logRequest(req);
         // TODO: must be implemented
 
@@ -130,19 +126,24 @@ module.exports = (app, web3) => {
     });
 
     // Get all projects created by a creator
-    app.get('/api/v1/projects/creator/:creator', function(req, res, next) {
+    app.get('/api/v1/projects/creator/:creator', function (req, res, next) {
         logRequest(req);
         // TODO: must be implemented
+
+        CreatorDB.getProjectsBy(req.params.creator).then(
+            result => res.send(result))
+            .catch(error => res.send(error));
+
     });
 
     // Get all projects funded by a backer
-    app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
+    app.get('/api/v1/projects/backer/:backer', function (req, res, next) {
         logRequest(req);
         // TODO: must be implemented
     });
 
     //Show project status 
-    app.get('/api/v1/projects/status/:project', function(req, res, next) {
+    app.get('/api/v1/projects/status/:project', function (req, res, next) {
 
         logRequest(req);
         let data = req.params;
@@ -160,7 +161,7 @@ module.exports = (app, web3) => {
     });
 
     //Show project information
-    app.get('/api/v1/projects/:project', function(req, res, next) {
+    app.get('/api/v1/projects/:project', function (req, res, next) {
         logRequest(req);
         let data = req.params;
 
