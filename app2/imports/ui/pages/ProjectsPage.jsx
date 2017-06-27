@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import React, { Component, PropTypes } from 'react';
 import { browserHistory, Link } from 'react-router';
 import { Accounts } from 'meteor/accounts-base';
@@ -10,34 +11,39 @@ import ProjectComponent from './project/ProjectComponent';
 
 export default class ProjectsPage extends TrackerReact(React.Component) {
 
-  constructor() {
-      super();
-		this.state = {
-          subscription: {
-            projects: Meteor.subscribe('projects')
-          }
-        }
-  }
+    constructor() {
+        super();
+        this.state = {
+            subscription: {
+                projects: Meteor.subscribe('projects'),
+            },
+        };
+    }
 
-  getProjects() {
-    let myProjects = Projects.find({}).fetch();
-    return myProjects.map((myProject) => {
-        return (
+    componentWillUnmount() {
+        this.state.subscription.projects.stop();
+	}
+
+    getMyProjects() {
+        const myProjects = Projects.find({ owner: Meteor.userId() }).fetch();
+        return myProjects.map((myProject) => {
+          return (
             <ProjectComponent 
                 key={myProject._id}
                 project={myProject}
+                type="myProjects"
             />
-        );
-    });
-  }           
-  render(){
-    return (
-        <div>
+          );
+        });
+    }
+    render() {
+        return (
+          <div>
             <h2>Projects</h2>
-            <ul>
-                {this.getProjects()}
-            </ul>
-        </div>
-    );
-  }
+            <div>
+                { this.getMyProjects() }
+            </div>
+          </div>
+        );
+    }
 }

@@ -1,22 +1,26 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
 
 export default class AddProjectComponent extends Component {
 
   addProject(event) {
       event.preventDefault();
-      let title = ReactDOM.findDOMNode(this.refs.title).value.trim();
-      let description = ReactDOM.findDOMNode(this.refs.description).value.trim();
-      let fundingGoal = parseFloat(ReactDOM.findDOMNode(this.refs.fundingGoal).value.trim());
-      Meteor.call('project.create', title, description, fundingGoal);
+      const title = ReactDOM.findDOMNode(this.refs.title).value.trim();
+      const description = ReactDOM.findDOMNode(this.refs.description).value.trim();
+      const fundingGoal = parseFloat(ReactDOM.findDOMNode(this.refs.fundingGoal).value.trim());
+      const initialSupply = parseInt(ReactDOM.findDOMNode(this.refs.initialSupply).value.trim());
+      const availableTokens = parseInt(ReactDOM.findDOMNode(this.refs.availableTokens).value.trim());
+      Meteor.call('project.create', title, description, fundingGoal, initialSupply, availableTokens);
       $('#addProjectModal').modal('hide');
+      $('#js-create-project-from').get(0).reset();
   }
 
   render(){
     return (
-      <div>
-        <button type="button" className="btn btn-info btn-lg" data-toggle="modal" data-target="#addProjectModal">
+      <div className="side-button">
+        <button type="button" className="btn btn-info btn-sm" data-toggle="modal" data-target="#addProjectModal">
             Fund new Project!
         </button>
         
@@ -28,7 +32,7 @@ export default class AddProjectComponent extends Component {
                 </div>
                 <div className="modal-body">
                     <p>Compile here</p>
-                    <form onSubmit={this.addProject.bind(this)}>
+                    <form id="js-create-project-from" onSubmit={this.addProject.bind(this)}>
                         <div className="form-group">
                             <label htmlFor="title">Title</label>
                             <input type="text" ref="title" className="form-control" placeholder="Enter the title of the project" />
@@ -43,6 +47,20 @@ export default class AddProjectComponent extends Component {
                                 <input type="number" ref="fundingGoal" className="form-control" step="0.000001" defaultValue="1.000000" placeholder="Enter the amount of money you want to raise"/>
                                 <span className="input-group-addon">Ξ</span>
                             </div>
+                        </div>
+                            <label htmlFor="initialSupply">Number of Tokens to create</label>
+                            <div className="input-group">
+                                <input type="number" ref="initialSupply" className="form-control" step="0" defaultValue="1" placeholder=""/>
+                                <span className="input-group-addon">Tokens</span>
+                            </div>
+                        <div>
+                        <div>
+                            <label htmlFor="availableTokens">Number of Tokens in the found raising</label>
+                            <div className="input-group">
+                                <input type="number" ref="availableTokens" className="form-control" step="0" defaultValue="1" placeholder=""/>
+                                <span className="input-group-addon">Tokens</span>
+                            </div>
+                        </div>
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
