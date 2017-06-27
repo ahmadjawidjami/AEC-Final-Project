@@ -28,6 +28,11 @@ export default class ProjectComponent extends Component {
         }
         return '';
     }
+    myFunds() {
+        if (this.props.type === "backed") {
+            return this.props.funds
+        }
+    }
 
     render() {
         return (
@@ -39,6 +44,7 @@ export default class ProjectComponent extends Component {
                 <div>
                     Backed 
                     <p>{this.props.project.fundingRaised}</p>/<p>{this.props.project.fundingGoal}</p>
+                    {JSON.stringify(this.myFunds())}
                 </div>
             </div>
           </div>

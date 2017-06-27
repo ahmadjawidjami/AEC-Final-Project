@@ -18,13 +18,14 @@ export default class ProjectsPage extends Component {
                         if (!projectsBacked[project._id]) {
                             // create the value in the array
                             projectsBacked[project._id] = [];
+                            console.log(project._id);
                         }
-                        projectsBacked[project._id].push(fund);
+                        projectsBacked[project._id] = fund;
                     }
                 }
             }
         }
-        console.log(projectsBacked);
+        console.log(projectsBacked['WCKSi3Yw4KXP99zym']);
         const renderArray = [];
 
         for (projectBacked in projectsBacked) {
@@ -34,6 +35,7 @@ export default class ProjectsPage extends Component {
                 <ProjectComponent 
                     key={projectBacked}
                     project={project}
+                    funds={projectsBacked[projectBacked]}
                     type="backed"
                 />
             );
