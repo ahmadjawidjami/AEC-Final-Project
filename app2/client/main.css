@@ -1,0 +1,14 @@
+/* CSS declarations go here */
+.input-group-addon
+{
+    background-color:#FFF;
+}
+.input-group .input-group-addon + .form-control
+{
+    border-left:none;
+}
+
+.side-button 
+{
+    float: right;
+}
