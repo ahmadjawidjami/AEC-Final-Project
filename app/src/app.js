@@ -15,6 +15,7 @@ const PUBLIC_APP_PORT = process.env.PUBLIC_APP_PORT || LOCAL_APP_PORT;
 // ====== uncomment this when you have docker set up
 // const MONGO_HOST = process.env.MONGO_HOST;
 // const MONGO_PORT = process.env.MONGO_PORT;
+// ====== detete this when docker
 const MONGO_HOST = "localhost";
 const MONGO_PORT = 27017;
 
@@ -22,13 +23,14 @@ const MONGO_PORT = 27017;
 const MONGO_URL = 'mongodb://' + MONGO_HOST +  ':' + MONGO_PORT + '/dev';
 global.db = mongoose.createConnection(MONGO_URL);
 
-// Express middleware
+// Express middlewares
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 // parse application/json
 app.use(bodyParser.json());
 // parse application/vnd.api+json as json
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+
 // import the router 
 require('./router.js')(app);
 
