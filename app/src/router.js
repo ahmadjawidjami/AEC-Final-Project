@@ -125,26 +125,25 @@ module.exports = (app, web3) => {
 
     });
 
-    app.get('/api/v1/projects', function(req, res, next) {
-
-    });
-
     // Get all projects created by a creator
     app.get('/api/v1/projects/creator/:creator', function(req, res, next) {
         logRequest(req);
-        // TODO: must be implemented
-        let data = { _id: req.params.creator }
+        let query = { _id: req.params.creator }
         CreatorDB
-            .getProjectsByAddress(data)
+            .getProjectsByAddress(query)
             .then(result => res.send(result))
             .catch(error => res.send(error));
 
     });
 
     // Get all projects funded by a backer
-    app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
+    app.get('/api/v1/projects/backer/:backer', function (req, res, next) {
         logRequest(req);
-        // TODO: must be implemented
+        let query = { _id: req.params.backer }
+
+        BackerDB.getProjectsByAddress(query).then(
+            result => res.send(result))
+            .catch(error => res.send(error));
     });
 
     //Show project status 
