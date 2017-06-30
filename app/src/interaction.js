@@ -48,6 +48,7 @@ module.exports = (web3) => {
                     reject(error);
                 else {
                     let ret = {
+                        projectAddress: data.project,
                         fundingGoal: result[0],
                         fundingStatus: result[1],
                         goalReached: result[2]

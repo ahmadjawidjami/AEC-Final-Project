@@ -131,9 +131,27 @@ module.exports = (app, web3) => {
         let query = { _id: req.params.creator }
         CreatorDB
             .getProjectsByAddress(query)
-            .then(result => res.send(result))
-            .catch(error => res.send(error));
+            .then(result => {
 
+                let projects = result[0].projects;
+
+                   let promisesArray = [];
+
+                    for (var index = 0; index < projects.length; index++){
+
+                        let data = {project: projects[index].address};
+
+                        promisesArray[index] = interactor.showStatus(data);
+                    }
+
+                    Promise.all(promisesArray).then(result => {
+
+                        console.log(result);
+                        res.send(result);
+
+                    }).catch(error => console.log(error));
+            })
+            .catch(error => res.send(error));
     });
 
     // Get all projects funded by a backer
