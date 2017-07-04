@@ -16,4 +16,18 @@ module.exports = class Database {
         return this.Model.find(query).select('projects -_id');
     }
 
+
+    updatePull(data){
+
+        console.log("called")
+
+     return this.Model.update(
+            {},
+            { $pull: { "projects": {address: data.project} } },
+            false,
+            false
+
+        )
+    }
+
 }

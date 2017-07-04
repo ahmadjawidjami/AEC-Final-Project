@@ -28,16 +28,16 @@ const MONGO_HOST = "localhost";
 const MONGO_PORT = 27017;
 
 // MongoDB connection
-const MONGO_URL = 'mongodb://' + MONGO_HOST +  ':' + MONGO_PORT + '/dev';
+const MONGO_URL = 'mongodb://' + MONGO_HOST + ':' + MONGO_PORT + '/dev';
 global.db = mongoose.createConnection(MONGO_URL);
 
 // Express middlewares
 // parse application/x-www-form-urlencoded
 // parse application/json
 // parse application/vnd.api+json as json
-app.use(bodyParser.urlencoded({ 'extended': 'true' }));
+app.use(bodyParser.urlencoded({'extended': 'true'}));
 app.use(bodyParser.json());
-app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+app.use(bodyParser.json({type: 'application/vnd.api+json'}));
 
 // check blockchain client
 // TODO: delete it when Docker is set up
@@ -48,7 +48,7 @@ try {
 } catch (error) {
     console.log(`WARN: No blockchain client listening, started a ${config.client} client`);
     console.log(path.resolve(__dirname, config.script));
-    exec(path.resolve(__dirname, config.script), function(error, stdout, stderr) {
+    exec(path.resolve(__dirname, config.script), function (error, stdout, stderr) {
         console.log("TestRPC started");
         if (error !== null) {
             console.log('exec error: ' + error);
@@ -83,10 +83,17 @@ const CreatorDB = new Database(require('../models/creators'));
 const interactor = require("./interaction")(web3);
 let killContract = function (data) {
     interactor.showStatus(data).then(function (result) {
-        if (!result.goalReached){
+        if (!result.goalReached) {
             //TODO remove the project from mongodb
 
-            interactor.kill(data);        }
+        CreatorDB.updatePull(data).then(result => {
+
+        }).catch(error =>{
+            console.log(error);
+        });
+
+            interactor.kill(data);
+        }
     })
 
 }
@@ -96,29 +103,29 @@ CreatorDB
     .then(result => {
 
         let creators = result;
-        for (let i = 0; i< creators.length; i++){
+        for (let i = 0; i < creators.length; i++) {
             let currentCreator = creators[i];
 
             let creatorProjects = currentCreator.projects;
-           // console.log(creatorProjects[0].address)
-          //  console.log(creatorProjects)
+            // console.log(creatorProjects[0].address)
+            //  console.log(creatorProjects)
 
-            for (let index = 0; index < creatorProjects.length; index++){
+            for (let index = 0; index < creatorProjects.length; index++) {
 
                 let data = {
                     creator: currentCreator._id,
                     project: creatorProjects[index].address
                 }
 
-              // //  console.log(data.project)
-              //
-              //  console.log(data.project)
-              //  interactor.showStatus(data).then(function (result) {
-                 //   if (!result.goalReached){
-                        console.log(creatorProjects[index])
-                        setTimeout(killContract, creatorProjects[index].deadline - Date.now(), data);
-                  //  }
-              //  })
+                // //  console.log(data.project)
+                //
+                //  console.log(data.project)
+                //  interactor.showStatus(data).then(function (result) {
+                //   if (!result.goalReached){
+                console.log(creatorProjects[index])
+                setTimeout(killContract, creatorProjects[index].deadline - Date.now(), data);
+                //  }
+                //  })
 
             }
         }
