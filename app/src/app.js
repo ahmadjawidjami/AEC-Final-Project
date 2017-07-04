@@ -82,12 +82,13 @@ const CreatorDB = new Database(require('../models/creators'));
 const BackerDB = new Database(require('../models/backers'));
 
 const interactor = require("./interaction")(web3);
-let killContract = function (data) {
+let killContractIfFundingGoalNotReached = data => {
     interactor.showStatus(data).then(function (result) {
         if (!result.goalReached) {
-            //TODO remove the project from mongodb
+
+            let query = { $pull: { "projects": {address: data.project} } }
         //remove the project from array of creator projects
-        CreatorDB.updatePull(data).then(result => {
+        CreatorDB.updatePull(query).then(result => {
 
             console.log(result);
 
@@ -96,7 +97,7 @@ let killContract = function (data) {
         });
 
         //remove project reference to backers
-        BackerDB.updatePull(data).then(result => {
+        BackerDB.updatePull(query).then(result => {
             console.log(result);
 
         }).catch(error => {
@@ -118,8 +119,6 @@ CreatorDB
             let currentCreator = creators[i];
 
             let creatorProjects = currentCreator.projects;
-            // console.log(creatorProjects[0].address)
-            //  console.log(creatorProjects)
 
             for (let index = 0; index < creatorProjects.length; index++) {
 
@@ -128,36 +127,9 @@ CreatorDB
                     project: creatorProjects[index].address
                 }
 
-                // //  console.log(data.project)
-                //
-                //  console.log(data.project)
-                //  interactor.showStatus(data).then(function (result) {
-                //   if (!result.goalReached){
                 console.log(creatorProjects[index])
-                setTimeout(killContract, Date.now(), data);
-                //  }
-                //  })
-
+                setTimeout(killContractIfFundingGoalNotReached, creatorProjects[index].deadline - Date.now(), data);
             }
         }
-
-        // let promisesArray = [];
-        // Promise.all(promisesArray).then(result => {
-        // }).catch(error => console.log(error));
     })
     .catch(error => console.log(error));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

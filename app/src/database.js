@@ -17,16 +17,10 @@ module.exports = class Database {
     }
 
 
-    updatePull(data){
+    updatePull(query) {
 
-
-     return this.Model.update(
-            {},
-            { $pull: { "projects": {address: data.project} } },
-            false,
-            false
-
-        )
+        return this.Model.update(
+            {}, query, false, false);
     }
 
 }
