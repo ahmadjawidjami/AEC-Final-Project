@@ -131,7 +131,7 @@ module.exports = (app, web3) => {
     app.get('/api/v1/projects', function(req, res, next) {
         logRequest(req);
         // TODO: must be implemented
-
+        console.log("PPP");
         // example...
         CreatorDB
             .getAll([{ $unwind: "$projects" }, {

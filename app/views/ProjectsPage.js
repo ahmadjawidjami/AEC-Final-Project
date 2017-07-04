@@ -11,6 +11,7 @@ export default class ProjectsPage extends Component {
 
 
     getMyProjects() {
+        
         // const myProjects = Projects.find({ owner: Meteor.userId() }).fetch();
         // return myProjects.map((myProject) => {
         //   return (

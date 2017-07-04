@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import http from 'http';
 
 // import { Projects } from '../../api/projects';
 
@@ -8,6 +9,25 @@ import AddProjectComponent from './project/AddProjectComponent';
 // import ProjectsBacked from './ProjectsBacked';
 
 class MainPage extends Component {
+
+
+    // http.get('http://localhost:8080/api/v1/projects', function(response) {
+    //       // Continuously update stream with data
+    //       var body = '';
+    //       response.on('data', function(d) {
+    //           body += d;
+    //       });
+    //       response.on('end', function() {
+
+    //           // Data reception is done, do whatever with it!
+    //           var projects = JSON.parse(body);
+    //           console.log("parsed", projects);
+    //           that.setState({
+    //             projects: projects
+    //           });
+    //       });
+    //   });
+    
 
     showUserProjects() {
       // return this.props.projects.map((project) => {
