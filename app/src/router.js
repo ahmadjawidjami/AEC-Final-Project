@@ -155,15 +155,11 @@ module.exports = (app, web3) => {
             .then(result => {
 
                 let projects = result[0].projects;
-
                 let promisesArray = [];
 
-                for (var index = 0; index < projects.length; index++) {
-
-                    let data = { project: projects[index].address };
-
-                    promisesArray[index] = interactor.showStatus(data);
-                }
+                projects.forEach((value, index) => {
+                    promisesArray.push(interactor.showStatus(value));
+                });
 
                 Promise.all(promisesArray).then(result => {
 
