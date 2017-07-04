@@ -9,6 +9,7 @@ const path = require("path");
 const jsonfile = require("jsonfile");
 const exec = require('child_process').exec;
 const config = require("../resources/config");
+const reactViews = require('express-react-views');
 
 // web3 dependency 
 const Web3 = require('web3');
@@ -39,6 +40,10 @@ app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
+app.set('view engine', 'js');
+app.engine('js', reactViews.createEngine());
+
+app.use(express.static(__dirname + '/../views'));
 // check blockchain client
 // TODO: delete it when Docker is set up
 try {

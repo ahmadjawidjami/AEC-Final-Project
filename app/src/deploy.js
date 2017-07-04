@@ -18,7 +18,7 @@ module.exports = (web3) => {
             // start a timer
             time.start();
             console.log(`Start creating token ${data.tokenName}...`);
-
+            
             // deploy the contract
             web3.eth
                 .contract(tokenContract.abi)

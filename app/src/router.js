@@ -2,19 +2,32 @@ const Database = require("./database");
 
 //var projects = jsonfile.readFileSync(path.resolve(__dirname, config.projectsFile));
 
-// TODO: move it in API v2 
+// TODO: move it in API v2
 const CreatorDB = new Database(require('../models/creators'));
 const BackerDB = new Database(require('../models/backers'));
 
 
 module.exports = (app, web3) => {
 
-    // Controllers 
+    // Controllers
     let deployer = require("./deploy")(web3);
     //var interactor = require("./interaction")(web3);
     let interactor = require("./interaction")(web3);
 
     console.info("API running...");
+
+
+    app.get('/', function (req, res) {
+        var initialState = {
+            items: [
+            'document your code',
+            'drop the kids off at the pool',
+            '</script><script>alert(666)</script>'
+            ],
+            text: ''
+        };
+        res.render('Html', { data: initialState });
+    });
 
     // Get Hello World
     app.get('/api/v1/', function(req, res, next) {
@@ -25,31 +38,12 @@ module.exports = (app, web3) => {
     // TODO: Change route
     app.post('/api/v1/projects', function(req, res, next) {
         logRequest(req);
-
-        // Mockup request
-        let request = {
-            token: {
-                initialSupply: 10,
-                tokenName: "Test Token",
-                tokenSymbol: "PS",
-                decimals: 4,
-                creator: web3.eth.accounts[0]
-            },
-            project: {
-                title: "Test Title",
-                description: "Frist Project With Token",
-                goal: 10,
-                token: "todo...",
-                duration: 10, //minutes
-                price: 2,
-                creator: web3.eth.accounts[0]
-            }
-        }
+        let request = req.body;
         deployer
             .createToken(request.token)
             .then(result => {
 
-                // set the token address inside the project 
+                // set the token address inside the project
                 request.project.token = result.address;
                 console.log(`Token ${result.address} created in ${result.time} seconds`);
                 // create the project and add a promise to the chain
@@ -75,16 +69,17 @@ module.exports = (app, web3) => {
                     .then(result => console.log(result))
                     .catch(error => console.log(error));
 
-                var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
-                res.send(r);
+                //var r = result.address;
+                var result = `${result.address}`;
+                res.json(result);
 
             })
             .catch(error => res.send(error))
             .catch(error => res.send(error));
     });
 
-    // Fund a project 
-    // TODO: change mongo call in API v2 
+    // Fund a project
+    // TODO: change mongo call in API v2
     app.post('/api/v1/projects/fund', function(req, res, next) {
 
         logRequest(req);
@@ -164,7 +159,7 @@ module.exports = (app, web3) => {
             .catch(error => res.send(error));
     });
 
-    //Show project status 
+    //Show project status
     app.get('/api/v1/projects/status/:project', function(req, res, next) {
 
         logRequest(req);
