@@ -10,7 +10,7 @@ import AddProjectComponent from './project/AddProjectComponent';
 
 class MainPage extends Component {
 
-
+    // let that = this;
     // http.get('http://localhost:8080/api/v1/projects', function(response) {
     //       // Continuously update stream with data
     //       var body = '';
@@ -52,7 +52,7 @@ class MainPage extends Component {
       // return (
       //   <ProjectsBacked />
       // )
-      null
+      null;
     }
 
     render() {
