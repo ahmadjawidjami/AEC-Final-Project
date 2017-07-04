@@ -19,10 +19,18 @@ export default class ProjectsPage extends Component {
           );
         });
     }
+
+    activateLasers() {
+        Meteor.call('gigi', 1, (err, succ) => {
+            console.log(succ);
+        });
+    }
+
     render() {
         return (
           <div>
             <h2>Projects</h2>
+            <button onClick={this.activateLasers}> Activate Lasers </button>
             <div>
                 { this.getOpenProjects() }
             </div>

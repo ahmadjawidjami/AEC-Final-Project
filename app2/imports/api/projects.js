@@ -2,11 +2,13 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { Match, check } from 'meteor/check';
 
+import interaction from './interaction';
+
 // TODO: Check this export
 export const Projects = new Mongo.Collection('projects');
 
 if (Meteor.isServer) {
-  Meteor.publish('projects', () => {
+    Meteor.publish('projects', () => {
       return Projects.find({
             // Return all the projects
         });
@@ -28,6 +30,7 @@ Meteor.methods({
         if (!Meteor.userId()) {
             throw new Meteor.Error('Not Authorized. Please log in');
         }
+        
 
         Projects.insert({
             title,
@@ -76,5 +79,11 @@ Meteor.methods({
         Projects.update({ _id: projectId }, { $push: { funds: { backer: Meteor.userId(), amount } } });
         Projects.update({ _id: projectId }, { $set: { fundingRaised } });
         console.log('done');
+    },
+    'gigi': function(number) {
+        check(number, Number);
+        console.log(number);
+        console.log(interaction);
+        return 10;
     }
 });
