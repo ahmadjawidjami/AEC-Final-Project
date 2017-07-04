@@ -79,17 +79,28 @@ app.listen(LOCAL_APP_PORT, () => {
 
 const Database = require("./database");
 const CreatorDB = new Database(require('../models/creators'));
+const BackerDB = new Database(require('../models/backers'));
 
 const interactor = require("./interaction")(web3);
 let killContract = function (data) {
     interactor.showStatus(data).then(function (result) {
         if (!result.goalReached) {
             //TODO remove the project from mongodb
-
+        //remove the project from array of creator projects
         CreatorDB.updatePull(data).then(result => {
+
+            console.log(result);
 
         }).catch(error =>{
             console.log(error);
+        });
+
+        //remove project reference to backers
+        BackerDB.updatePull(data).then(result => {
+            console.log(result);
+
+        }).catch(error => {
+            console.log(error)
         });
 
             interactor.kill(data);
@@ -123,7 +134,7 @@ CreatorDB
                 //  interactor.showStatus(data).then(function (result) {
                 //   if (!result.goalReached){
                 console.log(creatorProjects[index])
-                setTimeout(killContract, creatorProjects[index].deadline - Date.now(), data);
+                setTimeout(killContract, Date.now(), data);
                 //  }
                 //  })
 

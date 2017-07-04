@@ -19,7 +19,6 @@ module.exports = class Database {
 
     updatePull(data){
 
-        console.log("called")
 
      return this.Model.update(
             {},
