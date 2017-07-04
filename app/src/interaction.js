@@ -7,7 +7,9 @@ module.exports = (web3) => {
     // utility functions
     // get the speficied project
     let getProjectContract = (data) => {
-        return web3.eth.contract(contractData.abi).at(data.project);
+        return data.project ?
+            web3.eth.contract(contractData.abi).at(data.project) :
+            web3.eth.contract(contractData.abi).at(data.address);
     }
 
     // get the specified token
@@ -84,6 +86,17 @@ module.exports = (web3) => {
         });
     }
 
+    let getAllProjects = data => {
+        let promisesArray = [];
+
+        data.forEach((value, index) => {
+            promisesArray.push(getProject(value));
+        })
+
+        return Promise.all(promisesArray);
+
+    }
+
     // set project parameters 
     // TODO: check creator
     // @ahmad: promise added
@@ -158,6 +171,7 @@ module.exports = (web3) => {
 
 
     return {
+        getAllProjects: getAllProjects,
         getProject: getProject,
         showStatus: showStatus,
         setParams: setParams,

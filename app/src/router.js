@@ -17,12 +17,12 @@ module.exports = (app, web3) => {
     console.info("API running...");
 
 
-    app.get('/', function (req, res) {
+    app.get('/', function(req, res) {
         var initialState = {
             items: [
-            'document your code',
-            'drop the kids off at the pool',
-            '</script><script>alert(666)</script>'
+                'document your code',
+                'drop the kids off at the pool',
+                '</script><script>alert(666)</script>'
             ],
             text: ''
         };
@@ -39,6 +39,26 @@ module.exports = (app, web3) => {
     app.post('/api/v1/projects', function(req, res, next) {
         logRequest(req);
         let request = req.body;
+
+        request = {
+            token: {
+                initialSupply: 10,
+                tokenName: "Test Token",
+                tokenSymbol: "PS",
+                decimals: 4,
+                creator: web3.eth.accounts[0]
+            },
+            project: {
+                title: "Test Title",
+                description: "Frist Project With Token",
+                goal: 10,
+                token: "todo...",
+                duration: 10, //minutes
+                price: 2,
+                creator: web3.eth.accounts[0]
+            }
+        }
+
         deployer
             .createToken(request.token)
             .then(result => {
@@ -114,9 +134,15 @@ module.exports = (app, web3) => {
 
         // example...
         CreatorDB
-            .getAll()
+            .getAll([{ $unwind: "$projects" }, {
+                $project: { _id: 0, address: "$projects.address" }
+            }])
+            .then(result => {
+                return interactor.getAllProjects(result);
+            })
             .then(result => res.send(result))
             .catch(error => res.send(error));
+
 
     });
 
@@ -130,32 +156,32 @@ module.exports = (app, web3) => {
 
                 let projects = result[0].projects;
 
-                   let promisesArray = [];
+                let promisesArray = [];
 
-                    for (var index = 0; index < projects.length; index++){
+                for (var index = 0; index < projects.length; index++) {
 
-                        let data = {project: projects[index].address};
+                    let data = { project: projects[index].address };
 
-                        promisesArray[index] = interactor.showStatus(data);
-                    }
+                    promisesArray[index] = interactor.showStatus(data);
+                }
 
-                    Promise.all(promisesArray).then(result => {
+                Promise.all(promisesArray).then(result => {
 
-                        console.log(result);
-                        res.send(result);
+                    console.log(result);
+                    res.send(result);
 
-                    }).catch(error => console.log(error));
+                }).catch(error => console.log(error));
             })
             .catch(error => res.send(error));
     });
 
     // Get all projects funded by a backer
-    app.get('/api/v1/projects/backer/:backer', function (req, res, next) {
+    app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
         logRequest(req);
         let query = { _id: req.params.backer }
 
         BackerDB.getProjectsByAddress(query).then(
-            result => res.send(result))
+                result => res.send(result))
             .catch(error => res.send(error));
     });
 

@@ -4,12 +4,12 @@ module.exports = class Database {
         this.Model = model;
     }
 
-    getAll() {
-        return this.Model.find();
+    getAll(query) {
+        return this.Model.aggregate(query);
     }
 
     update(data, query) {
-        return this.Model.findByIdAndUpdate(data, query, {safe: true, upsert: true});
+        return this.Model.findByIdAndUpdate(data, query, { safe: true, upsert: true });
     }
 
     getProjectsByAddress(query) {
