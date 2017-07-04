@@ -14,7 +14,7 @@ pragma solidity ^0.4.8;
 
 // TODO, think of using the advanced one. 
 
-contract ProejctShare {
+contract ProjectShare {
     string public name;
     string public symbol;
     uint8 public decimals;
@@ -26,7 +26,7 @@ contract ProejctShare {
     event Transfer(address indexed from, address indexed to, uint256 value);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-    function ProejctShare(uint256 _initialSupply, string _tokenName, uint8 _decimalUnits, string _tokenSymbol) {
+    function ProjectShare(uint256 _initialSupply, string _tokenName, uint8 _decimalUnits, string _tokenSymbol) {
         if (_initialSupply == 0) _initialSupply = 100; 
         balanceOf[msg.sender] = _initialSupply;    // Give the creator all initial tokens
         name = _tokenName;                                   // Set the name for display purposes
