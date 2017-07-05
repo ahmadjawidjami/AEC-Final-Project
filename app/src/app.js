@@ -35,9 +35,9 @@ global.db = mongoose.createConnection(MONGO_URL);
 // parse application/x-www-form-urlencoded
 // parse application/json
 // parse application/vnd.api+json as json
-app.use(bodyParser.urlencoded({'extended': 'true'}));
+app.use(bodyParser.urlencoded({ 'extended': 'true' }));
 app.use(bodyParser.json());
-app.use(bodyParser.json({type: 'application/vnd.api+json'}));
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
 // check blockchain client
 // TODO: delete it when Docker is set up
@@ -48,7 +48,7 @@ try {
 } catch (error) {
     console.log(`WARN: No blockchain client listening, started a ${config.client} client`);
     console.log(path.resolve(__dirname, config.script));
-    exec(path.resolve(__dirname, config.script), function (error, stdout, stderr) {
+    exec(path.resolve(__dirname, config.script), function(error, stdout, stderr) {
         console.log("TestRPC started");
         if (error !== null) {
             console.log('exec error: ' + error);
@@ -77,59 +77,59 @@ app.listen(LOCAL_APP_PORT, () => {
 });
 
 
-const Database = require("./database");
-const CreatorDB = new Database(require('../models/creators'));
-const BackerDB = new Database(require('../models/backers'));
+// const Database = require("./database");
+// const CreatorDB = new Database(require('../models/creators'));
+// const BackerDB = new Database(require('../models/backers'));
 
-const interactor = require("./interaction")(web3);
-let killContractIfFundingGoalNotReached = data => {
-    interactor.showStatus(data).then(function (result) {
-        if (!result.goalReached) {
+// const interactor = require("./interaction")(web3);
+// let killContractIfFundingGoalNotReached = data => {
+//     interactor.showStatus(data).then(function(result) {
+//         if (!result.goalReached) {
 
-            let query = { $pull: { "projects": {address: data.project} } }
-        //remove the project from array of creator projects
-        CreatorDB.updatePull(query).then(result => {
+//             let query = { $pull: { "projects": { address: data.project } } }
+//                 //remove the project from array of creator projects
+//             CreatorDB.updatePull(query).then(result => {
 
-            console.log(result);
+//                 console.log(result);
 
-        }).catch(error =>{
-            console.log(error);
-        });
+//             }).catch(error => {
+//                 console.log(error);
+//             });
 
-        //remove project reference to backers
-        BackerDB.updatePull(query).then(result => {
-            console.log(result);
+//             //remove project reference to backers
+//             BackerDB.updatePull(query).then(result => {
+//                 console.log(result);
 
-        }).catch(error => {
-            console.log(error)
-        });
+//             }).catch(error => {
+//                 console.log(error)
+//             });
 
-            interactor.kill(data);
-        }
-    })
+//             interactor.kill(data);
+//         }
+//     })
 
-}
+// }
 
-CreatorDB
-    .getAll()
-    .then(result => {
+// CreatorDB
+//     .getAll()
+//     .then(result => {
 
-        let creators = result;
-        for (let i = 0; i < creators.length; i++) {
-            let currentCreator = creators[i];
+//         let creators = result;
+//         for (let i = 0; i < creators.length; i++) {
+//             let currentCreator = creators[i];
 
-            let creatorProjects = currentCreator.projects;
+//             let creatorProjects = currentCreator.projects;
 
-            for (let index = 0; index < creatorProjects.length; index++) {
+//             for (let index = 0; index < creatorProjects.length; index++) {
 
-                let data = {
-                    creator: currentCreator._id,
-                    project: creatorProjects[index].address
-                }
+//                 let data = {
+//                     creator: currentCreator._id,
+//                     project: creatorProjects[index].address
+//                 }
 
-                console.log(creatorProjects[index])
-                setTimeout(killContractIfFundingGoalNotReached, creatorProjects[index].deadline - Date.now(), data);
-            }
-        }
-    })
-    .catch(error => console.log(error));
+//                 console.log(creatorProjects[index])
+//                 setTimeout(killContractIfFundingGoalNotReached, creatorProjects[index].deadline - Date.now(), data);
+//             }
+//         }
+//     })
+//     .catch(error => console.log(error));

@@ -9,7 +9,7 @@ module.exports = class Database {
     }
 
     update(data, query) {
-        return this.Model.findByIdAndUpdate(data, query, {safe: true, upsert: true});
+        return this.Model.findByIdAndUpdate(data, query, { safe: true, upsert: true });
     }
 
     getProjectsByAddress(query) {
@@ -19,8 +19,7 @@ module.exports = class Database {
 
     updatePull(query) {
 
-        return this.Model.update(
-            {}, query, false, false);
+        return this.Model.update({}, query, false, false);
     }
 
 }

@@ -11,8 +11,8 @@ module.exports = (app, web3) => {
 
     // Controllers 
     let deployer = require("./deploy")(web3);
-    //var interactor = require("./interaction")(web3);
     let interactor = require("./interaction")(web3);
+    let scheduler = require("./scheduler")(interactor, CreatorDB, BackerDB);
 
     console.info("API running...");
 
@@ -40,7 +40,7 @@ module.exports = (app, web3) => {
                 description: "Frist Project With Token",
                 goal: 10,
                 token: "todo...",
-                duration: 10, //minutes
+                duration: 0.1, //minutes
                 price: 2,
                 creator: web3.eth.accounts[0]
             }
@@ -58,13 +58,14 @@ module.exports = (app, web3) => {
             .then(result => {
 
                 console.log(`Inserting ${request.project.title} into ${result.creator} projects list`);
+                let deadline = new Date().setTime(new Date().getTime() + (request.project.duration * 60 * 1000));
                 //write to mongoDB
                 let query = {
                     $push: {
                         "projects": {
                             address: result.address, // project contract address
                             token: request.project.token, // token contract address
-                            deadline: new Date().setTime(new Date().getTime() + (request.project.duration * 60 * 1000))
+                            deadline: deadline
                         }
                     }
                 }
@@ -72,10 +73,16 @@ module.exports = (app, web3) => {
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html
                 CreatorDB
                     .update(result.creator, query)
-                    .then(result => console.log(result))
+                    .then(result => console.log(`resultssss: ${result}`))
                     .catch(error => console.log(error));
 
+                let data = {
+                    creator: result.creator,
+                    project: result.address
+                };
                 var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
+                let s = scheduler.setScheduler({ deadline: deadline }, data);
+                console.log("asdfasdf");
                 res.send(r);
 
             })
@@ -135,32 +142,32 @@ module.exports = (app, web3) => {
 
                 let projects = result[0].projects;
 
-                   let promisesArray = [];
+                let promisesArray = [];
 
-                    for (var index = 0; index < projects.length; index++){
+                for (var index = 0; index < projects.length; index++) {
 
-                        let data = {project: projects[index].address};
+                    let data = { project: projects[index].address };
 
-                        promisesArray[index] = interactor.showStatus(data);
-                    }
+                    promisesArray[index] = interactor.showStatus(data);
+                }
 
-                    Promise.all(promisesArray).then(result => {
+                Promise.all(promisesArray).then(result => {
 
-                        console.log(result);
-                        res.send(result);
+                    console.log(result);
+                    res.send(result);
 
-                    }).catch(error => console.log(error));
+                }).catch(error => console.log(error));
             })
             .catch(error => res.send(error));
     });
 
     // Get all projects funded by a backer
-    app.get('/api/v1/projects/backer/:backer', function (req, res, next) {
+    app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
         logRequest(req);
         let query = { _id: req.params.backer }
 
         BackerDB.getProjectsByAddress(query).then(
-            result => res.send(result))
+                result => res.send(result))
             .catch(error => res.send(error));
     });
 
