@@ -163,21 +163,9 @@ module.exports = (app, web3) => {
                 let projects = result[0].projects;
                 let promisesArray = [];
 
-                <<
-                << << < HEAD
                 projects.forEach((value, index) => {
                     promisesArray.push(interactor.showStatus(value));
-                }); ===
-                === =
-                let promisesArray = [];
-
-                for (var index = 0; index < projects.length; index++) {
-
-                    let data = { project: projects[index].address };
-
-                    promisesArray[index] = interactor.showStatus(data);
-                } >>>
-                >>> > apis_final
+                });
 
                 Promise.all(promisesArray).then(result => {
 
