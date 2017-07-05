@@ -1,0 +1,58 @@
+<div class="container large-container">
+  <div class="row">
+    <div class="col-md-4 vertical-offset-30">
+      <h4 class="strong-header">Poi list </h4>
+      <div id="custom-search-input">
+        <div class="input-group">
+          <input type="text" class="search-query form-control" placeholder="Search..." ng-model="poiFilter"/>
+          <span class="input-group-btn">
+            <button type="button" ng-click="toggleAll()" class="btn btn-primary">{{showAll ? "Hide": "Show"}} All</button>
+          </span>
+        </div>
+      </div>
+      <hr />
+      <div class="left-info-fixed">
+        <h4>Circular poi</h4>
+        <ul class="list-group">
+          <a class="list-group-item custom-list-group-item" ng-repeat="poi in circularPoiList | filter: poiFilter" ng-click="setCircleOnMap($index)">
+            <button type="button" class="close" ng-click="removeCircularPoi($index)">&times;</button>
+            <h4 class="list-group-item-heading">{{poi.name}}</h4>
+            <p class="text-muted">{{poi.address}}</p>
+            <hr />
+            <p class="">
+              <b>Lat:</b> {{poi.location.coordinates[1].toFixed(6)}}
+              <b>Lng:</b>  {{poi.location.coordinates[0].toFixed(6)}}
+              <b>Radius:</b>  {{poi.radius.toFixed(2)}} m
+            </p>
+            <p class="">
+              <b>Active from:</b>  {{poi.interval.from | date: 'HH:mm' : '+0100'}}
+              <b>to:</b>  {{poi.interval.to | date: 'HH:mm' : '+0100'}}
+            </p>
+
+            <p class="small">Added by: <i class="text-primary">{{poi.sender}}</i></p>
+
+          </a>
+        </ul>
+
+        <h4 class="margin-8">Polygonal poi</h4>
+        <ul class="list-group">
+          <a class="list-group-item custom-list-group-item" ng-repeat="poi in polygonalPoiList | filter: poiFilter" ng-click="setPolygonOnMap($index)">
+            <button type="button" class="close" ng-click="removePolygonalPoi($index)">&times;</button>
+            <h4 class="list-group-item-heading">{{poi.name}}</h4>
+            <p class="text-muted">{{poi.address}}</p>
+            <hr />
+            <p class="">
+              <b>Active from:</b>  {{poi.interval.from | date: 'HH:mm' : '+0100'}}
+              <b>to:</b>  {{poi.interval.to | date: 'HH:mm' : '+0100'}}
+            </p>
+            <p class="small">Added by: <i class="text-primary">{{poi.sender}}</i></p>
+
+          </a>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="mapCanvas" class="half"></div>
+    </div>
+  </div>
+</div>

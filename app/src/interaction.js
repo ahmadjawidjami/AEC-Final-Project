@@ -77,7 +77,10 @@ module.exports = (web3) => {
                         fundingGoal: result[2],
                         fundingStatus: result[3],
                         finalFundings: result[4],
-                        goalReached: result[5]
+                        goalReached: result[5],
+                        address: data.project || data.address,
+                        deadline: data.deadline,
+                        token: data.token
                     }
                     resolve(project);
                 }

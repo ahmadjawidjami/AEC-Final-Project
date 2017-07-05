@@ -36,28 +36,15 @@ module.exports = (app, web3) => {
     });
 
     // TODO: Change route
+    // Create a project
     app.post('/api/v1/projects', function(req, res, next) {
         logRequest(req);
         let request = req.body;
 
-        request = {
-            token: {
-                initialSupply: 10,
-                tokenName: "Test Token",
-                tokenSymbol: "PS",
-                decimals: 4,
-                creator: web3.eth.accounts[0]
-            },
-            project: {
-                title: "Test Title",
-                description: "Frist Project With Token",
-                goal: 10,
-                token: "todo...",
-                duration: 0.1, //minutes
-                price: 2,
-                creator: web3.eth.accounts[0]
-            }
-        }
+        request.token.decimals = 4;
+        request.token.creator = web3.eth.accounts[0];
+        request.project.token = "todo...";
+        request.project.creator = web3.eth.accounts[0];
 
         deployer
             .createToken(request.token)
@@ -136,17 +123,18 @@ module.exports = (app, web3) => {
     // Get all projects
     app.get('/api/v1/projects', function(req, res, next) {
         logRequest(req);
-        // TODO: must be implemented
-        console.log("PPP");
-        // example...
+
         CreatorDB
-            .aggregare([{ $unwind: "$projects" }, {
-                $project: { _id: 0, address: "$projects.address" }
+            .aggregate([{ $unwind: "$projects" }, {
+                $project: { _id: 0, address: "$projects.address", deadline: "$projects.deadline", token: "$projects.token" }
             }])
             .then(result => {
                 return interactor.getAllProjects(result);
             })
-            .then(result => res.send(result))
+            .then(result => {
+                console.log(result);
+                res.send(result);
+            })
             .catch(error => res.send(error));
 
 
