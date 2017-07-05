@@ -28,8 +28,10 @@ export default class AddProjectComponent extends Component {
             duration, // minutes
             price,
         };
+        console.log(token);
+        console.log(project);
 
-
+        alert('A name was submitted: ' + this);
         // UPDATE
 
         $('#addProjectModal').modal('hide');
@@ -40,7 +42,7 @@ export default class AddProjectComponent extends Component {
         return (
           <div className="side-button">
           <button type="button" className="btn btn-info btn-sm" data-toggle="modal" data-target="#addProjectModal">
-            Fund new Project!
+            Create Project
         </button>
 
           <div id="addProjectModal" className="modal fade" role="dialog">

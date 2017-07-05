@@ -4,8 +4,12 @@ module.exports = class Database {
         this.Model = model;
     }
 
-    getAll(query) {
+    aggregate(query) {
         return this.Model.aggregate(query);
+    }
+
+    getAll(query) {
+        return this.Model.find(query);
     }
 
     update(data, query) {

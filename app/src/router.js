@@ -140,7 +140,7 @@ module.exports = (app, web3) => {
         console.log("PPP");
         // example...
         CreatorDB
-            .getAll([{ $unwind: "$projects" }, {
+            .aggregare([{ $unwind: "$projects" }, {
                 $project: { _id: 0, address: "$projects.address" }
             }])
             .then(result => {
@@ -182,8 +182,9 @@ module.exports = (app, web3) => {
         logRequest(req);
         let query = { _id: req.params.backer }
 
-        BackerDB.getProjectsByAddress(query).then(
-                result => res.send(result))
+        BackerDB
+            .getProjectsByAddress(query)
+            .then(result => res.send(result))
             .catch(error => res.send(error));
     });
 
