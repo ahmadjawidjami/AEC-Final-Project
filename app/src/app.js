@@ -29,7 +29,7 @@ const MONGO_HOST = "localhost";
 const MONGO_PORT = 27017;
 
 // MongoDB connection
-const MONGO_URL = 'mongodb://' + MONGO_HOST +  ':' + MONGO_PORT + '/dev';
+const MONGO_URL = 'mongodb://' + MONGO_HOST + ':' + MONGO_PORT + '/dev';
 global.db = mongoose.createConnection(MONGO_URL);
 
 // Express middlewares
@@ -80,3 +80,61 @@ app.listen(LOCAL_APP_PORT, () => {
     console.log("\n\n\n");
     console.log(`App started on port ${LOCAL_APP_PORT}`);
 });
+
+
+// const Database = require("./database");
+// const CreatorDB = new Database(require('../models/creators'));
+// const BackerDB = new Database(require('../models/backers'));
+
+// const interactor = require("./interaction")(web3);
+// let killContractIfFundingGoalNotReached = data => {
+//     interactor.showStatus(data).then(function(result) {
+//         if (!result.goalReached) {
+
+//             let query = { $pull: { "projects": { address: data.project } } }
+//                 //remove the project from array of creator projects
+//             CreatorDB.updatePull(query).then(result => {
+
+//                 console.log(result);
+
+//             }).catch(error => {
+//                 console.log(error);
+//             });
+
+//             //remove project reference to backers
+//             BackerDB.updatePull(query).then(result => {
+//                 console.log(result);
+
+//             }).catch(error => {
+//                 console.log(error)
+//             });
+
+//             interactor.kill(data);
+//         }
+//     })
+
+// }
+
+// CreatorDB
+//     .getAll()
+//     .then(result => {
+
+//         let creators = result;
+//         for (let i = 0; i < creators.length; i++) {
+//             let currentCreator = creators[i];
+
+//             let creatorProjects = currentCreator.projects;
+
+//             for (let index = 0; index < creatorProjects.length; index++) {
+
+//                 let data = {
+//                     creator: currentCreator._id,
+//                     project: creatorProjects[index].address
+//                 }
+
+//                 console.log(creatorProjects[index])
+//                 setTimeout(killContractIfFundingGoalNotReached, creatorProjects[index].deadline - Date.now(), data);
+//             }
+//         }
+//     })
+//     .catch(error => console.log(error));

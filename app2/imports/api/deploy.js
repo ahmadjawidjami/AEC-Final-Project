@@ -43,7 +43,7 @@ module.exports = (web3) => {
         });
 
     }
-
+    //TODO call the killContract scheduler for new contracts
     let deployContract = (data, callback) => {
         var projectContract = web3.eth.contract(contractData.abi);
 
