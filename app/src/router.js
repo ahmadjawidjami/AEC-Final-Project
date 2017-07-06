@@ -58,7 +58,7 @@ module.exports = (app, web3) => {
             })
             .then(result => {
 
-                console.log(`Inserting ${request.project.title} into ${result.creator} projects list`);
+                console.log(`Inserting ${request.project.title} into ${result.creator} projects list by ${request.project.creator}`);
                 let deadline = new Date().setTime(new Date().getTime() + (request.project.duration * 60 * 1000));
                 //write to mongoDB
                 let query = {
