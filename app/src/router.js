@@ -187,12 +187,13 @@ module.exports = (app, web3) => {
     });
 
     app.post('/api/v1/projects/withdraw', function(req, res, next) {
+        logRequest(req);
         // req = {
         //     project
         //     amount
         //     creator
         // }
-        let data = req.params;
+        let data = req.body;
         interactor
             .withdrawFunds(data)
             .then(result => res.send(result))
@@ -200,12 +201,13 @@ module.exports = (app, web3) => {
     });
 
     app.post('/api/v1/projects/claim-shares', function(req, res, next) {
+        logRequest(req);
         // req = {
         //     token
         //     project
         //     backer
         // }
-        let data = req.params;
+        let data = req.body;
         interactor
             .claimShares(data)
             .then(result => res.send(result))

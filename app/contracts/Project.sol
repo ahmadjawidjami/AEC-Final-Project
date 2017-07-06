@@ -108,8 +108,8 @@ contract Project {
     }
 
     // Withdraw funds
-    function withdraw(uint _amount) onlyOwner {
-        assert(goalReached);
+    function withdraw(uint _amount) onlyOwner campaignClosed{
+    
         // Get the funds 
         _amount = _amount * 1 ether; 
         if (_amount <= fundingStatus) {

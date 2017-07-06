@@ -122,13 +122,19 @@ module.exports = (web3) => {
 
     // withdraw funds
     let withdrawFunds = data => {
+        console.log('eeed');
         return new Promise((resolve, reject) => {
+            console.log('www');
             // instanciate the Withdraw event 
             let withdrawnFunds = getProjectContract(data).WithdrawnFunds({ fromBlock: 0, toBlock: 'latest' });
-
+            console.log(2);
+            console.log(data);
             // call the witdraw function on the contract 
-            getProjectContract(data).withdraw(data.amount, { from: data.creator, gas: 400000 });
-
+            let x = getProjectContract(data);
+            console.log(x);
+            x.withdraw(data.amount, { from: data.creator, gas: 400000 })
+            console.log(data);
+            console.log(3);
             // wait for the event to happen
             withdrawnFunds
                 .watch()
@@ -139,7 +145,7 @@ module.exports = (web3) => {
                 .catch(error => { reject(error) });
         });
     }
-    
+
 
     let claimShares = data => {
         return new Promise((resolve, reject) => {
@@ -183,7 +189,7 @@ module.exports = (web3) => {
         setParams,
         fundProject,
         withdrawFunds,
-        claimShare,
+        claimShares,
         kill
     };
 }

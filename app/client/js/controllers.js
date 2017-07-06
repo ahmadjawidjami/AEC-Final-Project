@@ -90,8 +90,9 @@ angular.module("Blockstarter.controllers", [])
         const req = {
             project,
             amount,
-            creator: AuthService.getUser().address
+            creator: user.address
         };
+        console.log(req);
 
         Api
             .withdrawProject(req)
@@ -103,7 +104,7 @@ angular.module("Blockstarter.controllers", [])
         const req = {
             token,
             project,
-            backer: AuthService.getUser().address
+            backer: user.address
         }
 
         Api

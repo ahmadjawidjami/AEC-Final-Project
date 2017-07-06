@@ -13,12 +13,16 @@
             <p class="lead">{{project.description}}</p>
 
             <div class="input-group" ng-show="!project.goalReached">
-                <input type="number" class="form-control" placeholder="" ng-model="amount" />
-                <span class="input-group-btn"><button type="button" ng-click="fundProject(project.address, amount)" class="btn btn-primary"> Back </button></span>
+                <input type="number" class="form-control" placeholder="" ng-model="backAmount" />
+                <span class="input-group-btn"><button type="button" ng-click="fundProject(project.address, backAmount)" class="btn btn-primary"> Back </button></span>
             </div>
-            <div class="input-group" ng-show="project.goalReached">
-                <input type="number" class="form-control" placeholder="" ng-model="amount" />
-                <span class="input-group-btn"><button type="button" ng-click="withdraw(project.address, amount)" class="btn btn-warning"> Withdraw </button></span>
+            <!--&& project.creator === user.address-->
+            <div class="input-group" ng-show="project.goalReached ">
+                <input type="number" class="form-control" placeholder="" ng-model="withdrawAmount" />
+                <span class="input-group-btn"><button type="button" ng-click="withdrawProject(project.address, withdrawAmount)" class="btn btn-warning"> Withdraw </button></span>
+            </div>
+            <div class="input-group" ng-show="project.goalReached ">
+                <span class="input-group-btn"><button type="button" ng-click="claimShares(project.address, project.token)" class="btn btn-warning"> Claim Shares </button></span>
             </div>
 
             <p class="">
