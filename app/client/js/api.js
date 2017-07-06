@@ -16,6 +16,21 @@ angular.module('Blockstarter.api', ['Blockstarter.config'])
             .catch(error => { return error; });
     }
 
+    this.getMyProjects = function(creator) {
+
+        return $http
+            .get(CONFIG.endpoint + '/projects/creator/' + creator)
+            .then(response => { return response.data; })
+            .catch(error => { return error; });
+    }
+
+    this.getInfo = function(projectAddress) {
+        return $http
+            .get(CONFIG.endpoint + '/projects/' + projectAddress)
+            .then(response => { return response.data; })
+            .catch(error => { return error; })
+    }
+
     // self.getUsers = function() {
     //     return $http.get(CONFIG.endpoint + CONFIG.users).then(
     //         function(response) {

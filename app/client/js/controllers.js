@@ -50,6 +50,32 @@ angular.module("Blockstarter.controllers", [])
     }
 })
 
+.controller('MyProjectsCtrl', function($scope, Api, $window, $rootScope) {
+    console.log('My Projects Controller');
+
+    const creator = '0x2d710bcf46d83854163ccbdb265fb4f46eab6be5';
+    console.log('This creator', creator);
+    Api
+        .getMyProjects(creator)
+        .then(response => {
+            console.log(response);
+            $scope.myProjectRaw = response;
+            
+            for (project of $scope.myProjectRaw) {
+
+                $scope.myProjectsList = [];
+                Api
+                    .getInfo(project.projectAddress)
+                    .then(response => {
+                        console.log(response);
+                        $scope.myProjectsList.push(response);
+                    })
+                    .catch(error => console.log(error));
+            }
+        })
+        .catch(error => console.log(error));
+})
+
 .controller('CreatorsCtrl', function($scope, Api, $window, $rootScope) {
     console.log("CreatorsCtrl");
 })

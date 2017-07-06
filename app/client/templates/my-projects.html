@@ -1,0 +1,38 @@
+<div class="container large-container">
+    <div class="row">
+        <div class="col-md-12 vertical-offset-30">
+            <h4 class="strong-header">Project list </h4>
+            <div id="custom-search-input">
+                <div class="input-group">
+                    <input type="text" class="search-query form-control" placeholder="Search..." ng-model="projectFilter" />
+                    <span class="input-group-btn">
+            <button type="button" ng-click="" class="btn btn-primary">{{showAll ? "Hide": "Show"}} All</button>
+          </span>
+                </div>
+            </div>
+            <hr />
+            <div class="left-info-fixed">
+                <ul class="list-group">
+                    <a class="list-group-item custom-list-group-item" ng-repeat="project in myProjectsList | filter: projectFilter" ng-click="openProject($index)">
+                        <h4 class="list-group-item-heading">{{project.title}}</h4>
+                        <p class="text-mute"><mark><em>{{project.address}}</em></mark></p>
+                        <p class="text-muted">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
+                        <hr />
+                        <p class="">
+                            <b>Description:</b> {{project.description}}
+                        </p>
+                        <p class="">
+                            <b>Funding Goal:</b> {{project.fundingGoal}}</br>
+                            <b>Amount Raised:</b> {{project.fundingStatus}}</br>
+                            <b>Ends:</b> {{project.deadline | date: 'dd-MM-yyyy @ HH:mm'}}</br>
+
+                        </p>
+
+                        <!--<p class="small">Added by: <i class="text-primary">{{project.sender}}</i></p>-->
+
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
