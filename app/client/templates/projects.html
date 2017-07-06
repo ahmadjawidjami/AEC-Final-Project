@@ -13,42 +13,9 @@
             <hr />
             <div class="left-info-fixed">
                 <ul class="list-group">
-                    <a class="list-group-item custom-list-group-item" ng-repeat="project in projectList | filter: projectFilter" ng-click="openProject($index)">
-                        <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">Back</button>
+                    <a class="list-group-item custom-list-group-item" ng-repeat="project in projectList | filter: projectFilter" ng-click="openProject(project)">
+                        <!--<button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#investInProjectModal" ng-click="open()">Back</button>-->
                         <h4 class="list-group-item-heading">{{project.title}}</h4>
-
-
-                        <div>
-                            <button type="button" class="btn btn-primary btn-sm side-button" data-toggle="modal" data-target=`#investInProjectModal`><span>Invest</span></button>
-
-                            <div id=`investInProjectModal` class="modal fade" role="dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Back this Project! {this.props.project.title}</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="js-create-project-from" onSubmit={this.backProject.bind(this)}>
-                                            <div class="form-group">
-                                                <label htmlFor="amountToBack">Title</label>
-                                                <div class="input-group">
-                                                    <input type="text" ref="amountToBack" class="form-control" step="0.000001" defaultValue="1.000000" placeholder="Amount to Back" />
-                                                    <span class="input-group-addon">Ξ</span>
-                                                </div>
-                                            </div>
-
-                                            <button type="submit" ng-click="backProject(project, token)" class="btn btn-primary">Invest</button>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
                         <p class="text-mute"><mark><em>{{project.address}}</em></mark></p>
                         <p class="text-muted">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
                         <hr />
@@ -59,11 +26,7 @@
                             <b>Funding Goal:</b> {{project.fundingGoal}}</br>
                             <b>Amount Raised:</b> {{project.fundingStatus}}</br>
                             <b>Ends:</b> {{project.deadline | date: 'dd-MMM-yyyy @ HH:mm'}}</br>
-
                         </p>
-
-                        <!--<p class="small">Added by: <i class="text-primary">{{project.sender}}</i></p>-->
-
                     </a>
                 </ul>
             </div>

@@ -16,7 +16,7 @@ angular.module("Blockstarter.controllers", [])
 
     $scope.logout = logout;
 
-    if (AuthService.getUser()){
+    if (AuthService.getUser()) {
         $scope.address = AuthService.getUser().address;
     }
 })
@@ -34,8 +34,9 @@ angular.module("Blockstarter.controllers", [])
         })
         .catch(error => console.log(error));
 
-    $scope.openProject = (index) => {
-        console.log(`called index: ${index}`)
+    $scope.openProject = (project) => {
+        console.log(`called index: ${project}`)
+        $window.location.href = `/#/projects/view/${project.address}`;
     }
 
     $scope.createProject = (project, token) => {
@@ -48,6 +49,33 @@ angular.module("Blockstarter.controllers", [])
             .then(response => {
                 console.log(response);
                 $window.location.href = '/#/projects'
+            })
+            .catch(error => console.log(error));
+    }
+})
+
+.controller('ProjectCtrl', function($scope, Api, $window, $rootScope, $routeParams, AuthService) {
+    console.log("Single Project Ctrl");
+    const user = AuthService.getUser();
+    console.log(user);
+
+    Api
+        .getProject($routeParams.project)
+        .then(response => {
+            console.log(response);
+            $scope.project = response;
+        })
+        .catch(error => console.log(error));
+
+    $scope.fundProject = (fund, project) => {
+        fund.project = project.address;
+        fund.backer = user.address;
+        console.log(fund);
+        Api
+            .fundProject(fund)
+            .then(response => {
+                console.log(response);
+                $scope.project = response;
             })
             .catch(error => console.log(error));
     }

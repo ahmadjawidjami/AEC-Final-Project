@@ -1,0 +1,27 @@
+<div class="jumbotron event">
+    <div class="container animated fadeInLeft">
+        <h1 class="display-4">{{project.title}}</h1>
+        <p class="text-mute"><em>{{project.address}}</em></p>
+        <p class="text-muted large">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 animated fadeInRight">
+            <!--1st Large Banner Image -->
+            <h3>Description</h3>
+            <p class="lead">{{project.description}}</p>
+
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="" ng-model="fund.amount" />
+                <span class="input-group-btn"><button type="button" ng-click="fundProject(fund, project)" class="btn btn-primary"> Back </button></span>
+            </div>
+
+            <p class="">
+                <b>Funding Goal:</b> {{project.fundingGoal}}</br>
+                <b>Amount Raised:</b> {{project.fundingStatus}}</br>
+                <b>Ends:</b> {{project.deadline | date: 'dd-MMM-yyyy @ HH:mm'}}</br>
+            </p>
+        </div>
+    </div>
+</div>
