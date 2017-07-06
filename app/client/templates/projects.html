@@ -14,6 +14,7 @@
             <div class="left-info-fixed">
                 <ul class="list-group">
                     <a class="list-group-item custom-list-group-item" ng-repeat="project in projectList | filter: projectFilter" ng-click="openProject($index)">
+                        <button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#exampleModal">Back</button>
                         <h4 class="list-group-item-heading">{{project.title}}</h4>
                         <p class="text-mute"><mark><em>{{project.address}}</em></mark></p>
                         <p class="text-muted">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
