@@ -34,11 +34,11 @@ angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Bloc
             controller: 'ProjectsCtrl'
         })
         .when('/creator/:creator', {
-            templateUrl: 'templates/creators.html',
+            templateUrl: 'templates/projects.html',
             controller: 'CreatorsCtrl'
         })
         .when('/backer/:backer', {
-            templateUrl: 'templates/backers.html',
+            templateUrl: 'templates/projects.html',
             controller: 'BackersCtrl'
         })
         .when('/login', {

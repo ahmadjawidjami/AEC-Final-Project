@@ -13,7 +13,7 @@
             <hr />
             <div class="left-info-fixed">
                 <ul class="list-group">
-                    <a class="list-group-item custom-list-group-item" ng-repeat="project in myProjectsList | filter: projectFilter" ng-click="openProject($index)">
+                    <a class="list-group-item custom-list-group-item" ng-repeat="project in projectList | filter: projectFilter" ng-click="openProject($index)">
                         <h4 class="list-group-item-heading">{{project.title}}</h4>
                         <p class="text-mute"><mark><em>{{project.address}}</em></mark></p>
                         <p class="text-muted">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
@@ -24,7 +24,7 @@
                         <p class="">
                             <b>Funding Goal:</b> {{project.fundingGoal}}</br>
                             <b>Amount Raised:</b> {{project.fundingStatus}}</br>
-                            <b>Ends:</b> {{project.deadline | date: 'dd-MM-yyyy @ HH:mm'}}</br>
+                            <b>Ends:</b> {{project.deadline | date: 'dd-MMM-yyyy @ HH:mm'}}</br>
 
                         </p>
 
