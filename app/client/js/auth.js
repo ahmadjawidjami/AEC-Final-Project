@@ -19,7 +19,7 @@ angular.module('Blockstarter.authServices', ['Blockstarter.config'])
             $window.localStorage[key] = JSON.stringify(value);
         },
         getObject: function(key) {
-            return JSON.parse($window.localStorage[key] || '{}');
+            return $window.localStorage[key] ? JSON.parse($window.localStorage[key]) : null;
         },
         remove: function(key) {
             return $window.localStorage.removeItem(key);
@@ -31,71 +31,47 @@ angular.module('Blockstarter.authServices', ['Blockstarter.config'])
  * AUTHENTICATION SERVICES using JWT + LOCALSTORAGE
  **/
 .service('AuthService', function($q, $http, CONFIG, AUTH_EVENTS, $localStorage) {
-    var LOCAL_TOKEN_KEY = 'GeofencingProjectToken';
+    let LOCAL_TOKEN_KEY = 'BlockstarterAuth';
     var isAuthenticated = false;
-    var authToken;
+    console.log("AuthService: " + isAuthenticated);
 
     function loadUserCredentials() {
-        var token = $localStorage.get(LOCAL_TOKEN_KEY);
-        if (token) {
+        let token = $localStorage.getObject(LOCAL_TOKEN_KEY);
+        if (token)
             useCredentials(token);
-        }
     }
 
     function storeUserCredentials(token) {
-        $localStorage.set(LOCAL_TOKEN_KEY, token);
+        $localStorage.setObject(LOCAL_TOKEN_KEY, token);
         useCredentials(token);
     }
 
-    function useCredentials(token) {
-        isAuthenticated = true;
-        authToken = token;
-        // We set the token as header for our requests
-        $http.defaults.headers.common.Authorization = authToken;
-    }
+    function useCredentials(token) { isAuthenticated = true; }
 
     function destroyUserCredentials() {
-        authToken = undefined;
         isAuthenticated = false;
-        $http.defaults.headers.common.Authorization = undefined;
         $localStorage.remove(LOCAL_TOKEN_KEY);
     }
 
-    var register = function(user) {
-        return $q(function(resolve, reject) {
-            $http.post(CONFIG.endpoint + CONFIG.register, user).then(function(result) {
-                if (result.data.success) {
-                    resolve(result.data.msg);
-                } else {
-                    reject(result.data.msg);
-                }
-            });
-        });
-    };
+    function getUser() {
+        return $localStorage.getObject(LOCAL_TOKEN_KEY);
+    }
 
     var login = function(user) {
-        return $q(function(resolve, reject) {
-            $http.post(CONFIG.endpoint + CONFIG.login, user).then(function(result) {
-                if (result.data.success) {
-                    storeUserCredentials(result.data.token);
-                    resolve(result.data.msg);
-                } else {
-                    reject(result.data.msg);
-                }
-            });
+        return $q((resolve, reject) => {
+            storeUserCredentials(user);
+            resolve(user);
         });
     };
 
-    var logout = function() {
-        destroyUserCredentials();
-    };
+    let logout = () => { destroyUserCredentials(); };
 
     loadUserCredentials();
 
     return {
-        login: login,
-        register: register,
-        logout: logout,
+        getUser,
+        login,
+        logout,
         isAuthenticated: function() { return isAuthenticated; },
     };
 })

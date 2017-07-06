@@ -8,6 +8,10 @@ module.exports = class Database {
         return this.Model.aggregate(query);
     }
 
+    get(query) {
+        return this.Model.findOne(query);
+    }
+
     getAll(query) {
         return this.Model.find(query);
     }
