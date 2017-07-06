@@ -21,7 +21,7 @@ angular.module("Blockstarter.controllers", [])
     }
 })
 
-.controller('ProjectsCtrl', function($scope, Api, $window, $rootScope, AuthService) {
+.controller('ProjectsCtrl', function($scope, Api, $window, $rootScope, AuthService, projectService) {
     console.log("ProjectsCtrl");
     const user = AuthService.getUser();
     console.log(user);
@@ -36,6 +36,7 @@ angular.module("Blockstarter.controllers", [])
 
     $scope.openProject = (project) => {
         console.log(`called index: ${project}`)
+        projectService.addProject(project);
         $window.location.href = `/#/projects/view/${project.address}`;
     }
 
@@ -55,18 +56,19 @@ angular.module("Blockstarter.controllers", [])
 
 })
 
-.controller('ProjectCtrl', function($scope, Api, $window, $rootScope, $routeParams, AuthService) {
+.controller('ProjectCtrl', function($scope, Api, $window, $rootScope, $routeParams, AuthService, projectService) {
     console.log("Single Project Ctrl");
     const user = AuthService.getUser();
+    $scope.user = user;
     console.log(user);
-
-    Api
-        .getProject($routeParams.project)
-        .then(response => {
-            console.log(response);
-            $scope.project = response;
-        })
-        .catch(error => console.log(error));
+    $scope.project = projectService.getProject();
+    // Api
+    //     .getProject($routeParams.project)
+    //     .then(response => {
+    //         console.log(response);
+    //         $scope.project = response;
+    //     })
+    //     .catch(error => console.log(error));
 
     $scope.fundProject = (project, amount) => {
         const req = {

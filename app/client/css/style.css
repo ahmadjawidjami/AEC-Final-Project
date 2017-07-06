@@ -144,6 +144,13 @@ html {
     width: 110%;
 }
 
+.jumbotron.event {
+    background: #000 url('images/btc-to-eur.jpg') center center;
+    background-position-y: 23%;
+    color: #ffffff;
+    border-radius: 0;
+}
+
 .panel {
     margin-bottom: 20px;
     padding: 20px 10px;

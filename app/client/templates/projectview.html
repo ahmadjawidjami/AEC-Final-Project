@@ -12,14 +12,19 @@
             <h3>Description</h3>
             <p class="lead">{{project.description}}</p>
 
-            <div class="input-group">
+            <div class="input-group" ng-show="!project.goalReached">
                 <input type="number" class="form-control" placeholder="" ng-model="amount" />
                 <span class="input-group-btn"><button type="button" ng-click="fundProject(project.address, amount)" class="btn btn-primary"> Back </button></span>
+            </div>
+            <div class="input-group" ng-show="project.goalReached">
+                <input type="number" class="form-control" placeholder="" ng-model="amount" />
+                <span class="input-group-btn"><button type="button" ng-click="withdraw(project.address, amount)" class="btn btn-warning"> Withdraw </button></span>
             </div>
 
             <p class="">
                 <b>Funding Goal:</b> {{project.fundingGoal}}</br>
-                <b>Amount Raised:</b> {{project.fundingStatus}}</br>
+                <b>Amount Raised:</b> {{project.finalFundings}}</br>
+                <span ng-show="project.goalReached"><b>Amount Left:</b> {{project.fundingStatus}}</br></span>
                 <b>Ends:</b> {{project.deadline | date: 'dd-MMM-yyyy @ HH:mm'}}</br>
             </p>
         </div>

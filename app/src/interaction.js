@@ -66,7 +66,9 @@ module.exports = (web3) => {
     // TODO: check sender of the transaction
     // @ahmad: promise added
     let getProject = data => {
+        console.log('data', data);
         return new Promise((resolve, reject) => {
+
             getProjectContract(data).getInfo({ from: data.creator }, (error, result) => {
                 if (error)
                     reject(error);
@@ -174,13 +176,13 @@ module.exports = (web3) => {
 
 
     return {
-        getAllProjects: getAllProjects,
-        getProject: getProject,
-        showStatus: showStatus,
-        setParams: setParams,
-        fundProject: fundProject,
-        withdrawFunds: withdrawFunds,
-        claimShare: claimShare,
-        kill: kill
+        getAllProjects,
+        getProject,
+        showStatus,
+        setParams,
+        fundProject,
+        withdrawFunds,
+        claimShare,
+        kill
     };
 }

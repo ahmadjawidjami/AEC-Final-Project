@@ -55,4 +55,22 @@ angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Bloc
         });
 
     $httpProvider.interceptors.push('AuthInterceptor');
-});
+})
+
+.service('projectService', function() {
+    let project = '';
+
+    let addProject = function(proj) {
+        project = proj;
+    };
+
+    let getProject = function() {
+        return project;
+    };
+
+    return {
+        addProject,
+        getProject
+    };
+
+});;
