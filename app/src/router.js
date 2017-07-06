@@ -129,20 +129,12 @@ module.exports = (app, web3) => {
         CreatorDB
             .getProjectsByAddress(query)
             .then(result => {
-
                 let projects = result[0].projects;
-                let promisesArray = [];
-
-                projects.forEach((value, index) => {
-                    promisesArray.push(interactor.getInfo(value));
-                });
-
-                Promise.all(promisesArray).then(result => {
-
-                    console.log(result);
-                    res.send(result);
-
-                }).catch(error => console.log(error));
+                return interactor.getAllProjects(projects);
+            })
+            .then(result => {
+                console.log(result);
+                res.send(result);
             })
             .catch(error => res.send(error));
     });
@@ -193,3 +185,21 @@ module.exports = (app, web3) => {
     }
 
 }
+
+
+
+
+// let query = [{ $match: { _id: req.params.creator } }, { $unwind: "$projects" }, {
+//             $project: { _id: 0, address: "$projects.address", deadline: "$projects.deadline", token: "$projects.token" }
+//         }];
+
+//         CreatorDB
+//             .aggregate(query)
+//             .then(result => {
+//                 return interactor.getAllProjects(result);
+//             })
+//             .then(result => {
+//                 console.log(result);
+//                 res.send(result);
+//             })
+//             .catch(error => res.send(error));
