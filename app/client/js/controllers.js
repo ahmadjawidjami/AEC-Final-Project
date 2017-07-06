@@ -85,6 +85,33 @@ angular.module("Blockstarter.controllers", [])
             })
             .catch(error => console.error(error));
     }
+
+    $scope.withdrawProject = (project, amount) => {
+        const req = {
+            project,
+            amount,
+            creator: AuthService.getUser().address
+        };
+
+        Api
+            .withdrawProject(req)
+            .then(response => console.log('Withdraw', response))
+            .catch(error => console.error(error));
+    }
+
+    $scope.claimShares = (project, token) => {
+        const req = {
+            token,
+            project,
+            backer: AuthService.getUser().address
+        }
+
+        Api
+            .claimShares(req)
+            .then(response => console.log('Claim Shares', response))
+            .catch(error => console.error(errors));
+    }
+
 })
 
 .controller('CreatorsCtrl', function($scope, Api, $window, $rootScope, AuthService) {
