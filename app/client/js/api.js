@@ -46,14 +46,29 @@ angular.module('Blockstarter.api', ['Blockstarter.config'])
     }
 
     this.getBackedProjects = function(backer) {
-            return $http
-                .get(`${CONFIG.endpoint}/projects/backer/${backer}`)
-                .then(response => {
-                    console.log('Project by backer', response);
-                    return response.data;
-                })
-                .catch(error => { return error; });
-        }
+        return $http
+            .get(`${CONFIG.endpoint}/projects/backer/${backer}`)
+            .then(response => {
+                console.log('Project by backer', response);
+                return response.data;
+            })
+            .catch(error => { return error; });
+    }
+
+    this.withdrawProject = function(data) {
+        return $http
+            .post(CONFIG.endpoint + '/projects/withdraw', data)
+            .then(response => response.data)
+            .catch(error => error);
+    }
+
+    this.claimShares = function(data) {
+        return $http
+            .post(CONFIG.endpoint + '/projects/claim-shares', data)
+            .then(response => response.data)
+            .catch(error => error);
+    }
+
         // self.getUsers = function() {
         //     return $http.get(CONFIG.endpoint + CONFIG.users).then(
         //         function(response) {

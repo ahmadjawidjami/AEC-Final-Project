@@ -137,8 +137,9 @@ module.exports = (web3) => {
                 .catch(error => { reject(error) });
         });
     }
+    
 
-    let claimShare = data => {
+    let claimShares = data => {
         return new Promise((resolve, reject) => {
 
             // instanciate the transfer event 

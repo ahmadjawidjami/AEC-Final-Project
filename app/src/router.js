@@ -186,6 +186,32 @@ module.exports = (app, web3) => {
             .catch(error => res.send(error));
     });
 
+    app.post('/api/v1/projects/withdraw', function(req, res, next) {
+        // req = {
+        //     project
+        //     amount
+        //     creator
+        // }
+        let data = req.params;
+        interactor
+            .withdrawFunds(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+    });
+
+    app.post('/api/v1/projects/claim-shares', function(req, res, next) {
+        // req = {
+        //     token
+        //     project
+        //     backer
+        // }
+        let data = req.params;
+        interactor
+            .claimShares(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+    });
+
     // Log utility
     let logRequest = req => {
         console.log(req.method + " on " + req.originalUrl);
