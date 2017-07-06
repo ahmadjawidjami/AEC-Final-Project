@@ -1,30 +1,25 @@
-angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Blockstarter.config', 'Blockstarter.controllers', 'Blockstarter.api', ])
+angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Blockstarter.config', 'Blockstarter.controllers', 'Blockstarter.api', 'Blockstarter.authServices'])
     .run(function($rootScope, $window) {
         console.info("Blockstarter 4.0 Project");
 
         // handling navbar in different controllers (to hide or show the header navbar)
-        // $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
-        //     if (current.$$route.controller === "RegisterCtrl" || current.$$route.controller === "LoginCtrl") {
-        //         $rootScope.navbar = false;
-        //         $rootScope.footerbar = false;
-        //     } else if (current.$$route.controller === "AnnotatorCtrl") {
-        //         $rootScope.navbar = true;
-        //         $rootScope.footerbar = false;
-        //     } else {
-        //         $rootScope.navbar = true;
-        //         $rootScope.footerbar = true;
-        //     }
-        // });
+        $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+            if (current.$$route.controller === "RegisterCtrl" || current.$$route.controller === "LoginCtrl") {
+                $rootScope.navbar = false;
+                $rootScope.footerbar = false;
+            } else {
+                $rootScope.navbar = true;
+                $rootScope.footerbar = true;
+            }
+        });
 
-        // // event handler fired when the transition begins
-        // $rootScope.$on('$stateChangeStart', function(event, next, nextParams, fromState) {
-        //     if (!AuthService.isAuthenticated()) {
-        //         if (next.name !== 'outside.login' && next.name !== 'outside.register') {
-        //             event.preventDefault();
-        //             window.location.href = "/#/login";
-        //         }
-        //     }
-        // });
+        // event handler fired when the transition begins
+        $rootScope.$on('$stateChangeStart', function(event, next, nextParams, fromState) {
+            if (!AuthService.isAuthenticated()) {
+                event.preventDefault();
+                window.location.href = "/#/login";
+            }
+        });
     })
 
 .config(function($routeProvider, $httpProvider) {
@@ -38,17 +33,21 @@ angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Bloc
             templateUrl: 'templates/add-project.html',
             controller: 'ProjectsCtrl'
         })
-        .when('/creators', {
+        .when('/creator/:creator', {
             templateUrl: 'templates/creators.html',
             controller: 'CreatorsCtrl'
         })
-        .when('/backers', {
+        .when('/backer/:backer', {
             templateUrl: 'templates/backers.html',
             controller: 'BackersCtrl'
+        })
+        .when('/login', {
+            templateUrl: 'templates/login.html',
+            controller: 'LoginCtrl'
         })
         .otherwise({
             redirectTo: '/projects/view'
         });
 
-    //$httpProvider.interceptors.push('AuthInterceptor');
+    $httpProvider.interceptors.push('AuthInterceptor');
 });

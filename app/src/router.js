@@ -1,11 +1,6 @@
 const Database = require("./database");
-
-//var projects = jsonfile.readFileSync(path.resolve(__dirname, config.projectsFile));
-
-// TODO: move it in API v2
 const CreatorDB = new Database(require('../models/creators'));
 const BackerDB = new Database(require('../models/backers'));
-
 
 module.exports = (app, web3) => {
 
@@ -15,19 +10,6 @@ module.exports = (app, web3) => {
     let scheduler = require("./scheduler")(interactor, CreatorDB, BackerDB);
 
     console.info("API running...");
-
-
-    app.get('/', function(req, res) {
-        var initialState = {
-            items: [
-                'document your code',
-                'drop the kids off at the pool',
-                '</script><script>alert(666)</script>'
-            ],
-            text: ''
-        };
-        res.render('Html', { data: initialState });
-    });
 
     // Get Hello World
     app.get('/api/v1/', function(req, res, next) {
@@ -42,9 +24,9 @@ module.exports = (app, web3) => {
         let request = req.body;
 
         request.token.decimals = 4;
-        request.token.creator = web3.eth.accounts[0];
+        // request.token.creator = web3.eth.accounts[0];
         request.project.token = "todo...";
-        request.project.creator = web3.eth.accounts[0];
+        // request.project.creator = web3.eth.accounts[0];
 
         deployer
             .createToken(request.token)

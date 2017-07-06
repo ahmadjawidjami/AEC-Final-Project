@@ -33,14 +33,14 @@
     <script src="js/app.js"></script>
     <script src="js/config.js"></script>
     <script src="js/controllers.js"></script>
-    <!--<script src="js/auth.js"></script>-->
+    <script src="js/auth.js"></script>
     <script src="js/api.js"></script>
 
 </head>
 
 <body ng-app="Blockstarter" ng-controller="AppCtrl">
     <!-- Start app header -->
-    <nav class="navbar navbar-dark navbar-custom" ng-show="true">
+    <nav class="navbar navbar-dark navbar-custom" ng-show="navbar">
         <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#exCollapsingNavbar2" aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
       &#9776;
     </button>
@@ -48,20 +48,20 @@
             <!--<a class="navbar-brand" href="/#/poi/view"><img src="css/images/logo-pin.png" height="40" class="navbar-custom-image" /></a>-->
             <ul class="nav navbar-nav">
                 <li class="nav-item nav-item-custom active">
-                    <a class="nav-link" href="/#/projects/view">View Projects</a>
+                    <a class="nav-link" ng-href="/#/projects/view">View Projects</a>
                 </li>
                 <li class="nav-item nav-item-custom">
-                    <a class="nav-link" href="/#/projects/add"> <span class="fa fa-plus"></span> Add Project</a>
-                </li>
-                <!--<li class="nav-item nav-item-custom" ng-show="isAdmin">
-                    <a class="nav-link" href="/#/users/info"> <span class="fa fa-bar-chart-o"></span> Backers</a>
+                    <a class="nav-link" ng-href="/#/projects/add"> <span class="fa fa-plus"></span> Add Project</a>
                 </li>
                 <li class="nav-item nav-item-custom">
+                    <a class="nav-link" ng-href="/#/creator/{{address}}"> <span class="fa fa-bar-chart-o"></span> Created Projects</a>
+                </li>
+                <li class="nav-item nav-item-custom">
+                    <a class="nav-link" ng-href="/#/backer/{{address}}"> <span class="fa fa-bar-chart-o"></span> Backed Projects</a>
+                </li>
+                <li class="nav-item nav-item-custom pull-right">
                     <a class="nav-link" ng-click="logout()"> <span class="fa fa-unlock-alt"></span> Logout</a>
                 </li>
-                <li class="nav-item-custom pull-right">
-                    <a class="nav-link">{{userInfo.name}} {{userInfo.lastname}}</a>
-                </li>-->
             </ul>
         </div>
     </nav>
