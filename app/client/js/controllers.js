@@ -15,7 +15,10 @@ angular.module("Blockstarter.controllers", [])
     }
 
     $scope.logout = logout;
-    $scope.address = AuthService.getUser().address;
+
+    if (AuthService.getUser()){
+        $scope.address = AuthService.getUser().address;
+    }
 })
 
 .controller('ProjectsCtrl', function($scope, Api, $window, $rootScope, AuthService) {

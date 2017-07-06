@@ -4,6 +4,7 @@ angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Bloc
 
         // handling navbar in different controllers (to hide or show the header navbar)
         $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+            
             if (current.$$route.controller === "RegisterCtrl" || current.$$route.controller === "LoginCtrl") {
                 $rootScope.navbar = false;
                 $rootScope.footerbar = false;
