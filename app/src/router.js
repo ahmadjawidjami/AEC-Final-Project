@@ -143,10 +143,16 @@ module.exports = (app, web3) => {
     app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
         logRequest(req);
         let query = { _id: req.params.backer }
-
-        BackerDB
+        CreatorDB
             .getProjectsByAddress(query)
-            .then(result => res.send(result))
+            .then(result => {
+                let projects = result[0].projects;
+                return interactor.getAllProjects(projects);
+            })
+            .then(result => {
+                console.log(result);
+                res.send(result);
+            })
             .catch(error => res.send(error));
     });
 
