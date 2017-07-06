@@ -84,12 +84,13 @@ angular.module("Blockstarter.controllers", [])
     }
 })
 
-.controller('BackersCtrl', function($scope, Api, $window, $rootScope) {
+.controller('BackersCtrl', function($scope, Api, $window, $rootScope, AuthService) {
     console.log("BackersCtrl");
 
     Api
         .getBackedProjects(AuthService.getUser().address)
         .then(response => {
+            console.log("AUG");
             console.log(response);
         })
         .catch(error => console.error(error));
