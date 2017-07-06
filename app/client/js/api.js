@@ -38,15 +38,31 @@ angular.module('Blockstarter.api', ['Blockstarter.config'])
             .catch(error => { return error; })
     }
 
-    // self.getUsers = function() {
-    //     return $http.get(CONFIG.endpoint + CONFIG.users).then(
-    //         function(response) {
-    //             return response.data;
-    //         },
-    //         function(error) {
-    //             return error;
-    //         });
-    // };
+    this.backProject = function(fund) {
+        return $http
+            .post(CONFIG.endpoint + '/projects/fund', fund)
+            .then(response => { return response.data; })
+            .catch(error => { return error; });
+    }
+
+    this.getBackedProjects = function(backer) {
+            return $http
+                .get(`${CONFIG.endpoint}/projects/backer/${backer}`)
+                .then(response => {
+                    console.log('Project by backer', response);
+                    return response.data;
+                })
+                .catch(error => { return error; });
+        }
+        // self.getUsers = function() {
+        //     return $http.get(CONFIG.endpoint + CONFIG.users).then(
+        //         function(response) {
+        //             return response.data;
+        //         },
+        //         function(error) {
+        //             return error;
+        //         });
+        // };
 
     // self.getCurrentUser = function() {
     //     return $http.get(CONFIG.endpoint + CONFIG.user).then(function(result) {

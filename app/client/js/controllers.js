@@ -52,6 +52,7 @@ angular.module("Blockstarter.controllers", [])
             })
             .catch(error => console.log(error));
     }
+
 })
 
 .controller('ProjectCtrl', function($scope, Api, $window, $rootScope, $routeParams, AuthService) {
@@ -67,17 +68,20 @@ angular.module("Blockstarter.controllers", [])
         })
         .catch(error => console.log(error));
 
-    $scope.fundProject = (fund, project) => {
-        fund.project = project.address;
-        fund.backer = user.address;
-        console.log(fund);
+    $scope.fundProject = (project, amount) => {
+        const req = {
+            project,
+            amount,
+            backer: user.address
+        }
+        console.log(req);
         Api
-            .fundProject(fund)
+            .backProject(req)
             .then(response => {
                 console.log(response);
-                $scope.project = response;
+                //window.location.reload();
             })
-            .catch(error => console.log(error));
+            .catch(error => console.error(error));
     }
 })
 
@@ -97,8 +101,16 @@ angular.module("Blockstarter.controllers", [])
     }
 })
 
-.controller('BackersCtrl', function($scope, Api, $window, $rootScope) {
+.controller('BackersCtrl', function($scope, Api, $window, $rootScope, AuthService) {
     console.log("BackersCtrl");
+
+    Api
+        .getBackedProjects(AuthService.getUser().address)
+        .then(response => {
+            console.log(response);
+            $scope.projectList = response;
+        })
+        .catch(error => console.error(error));
 })
 
 .controller('LoginCtrl', function($scope, Api, $window, $rootScope, AuthService, $http, CONFIG, AUTH_EVENTS) {
