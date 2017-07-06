@@ -41,15 +41,9 @@ angular.module("Blockstarter", ['ngRoute', 'ngSanitize', 'mgcrea.ngStrap', 'Bloc
             templateUrl: 'templates/backers.html',
             controller: 'BackersCtrl'
         })
-<<<<<<< HEAD
-        .when('/myprojects', {
-            templateUrl: 'templates/my-projects.html',
-            controller: 'MyProjectsCtrl'
-=======
         .when('/login', {
             templateUrl: 'templates/login.html',
             controller: 'LoginCtrl'
->>>>>>> 2f54e1d20e70015c77ab53521e1e58b201c113bb
         })
         .otherwise({
             redirectTo: '/projects/view'

@@ -16,7 +16,7 @@ angular.module('Blockstarter.api', ['Blockstarter.config'])
             .catch(error => { return error; });
     }
 
-    this.getMyProjects = function(creator) {
+    this.getCreatedProjects = function(creator) {
 
         return $http
             .get(CONFIG.endpoint + '/projects/creator/' + creator)

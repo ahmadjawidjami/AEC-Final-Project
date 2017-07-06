@@ -134,7 +134,7 @@ module.exports = (app, web3) => {
                 let promisesArray = [];
 
                 projects.forEach((value, index) => {
-                    promisesArray.push(interactor.showStatus(value));
+                    promisesArray.push(interactor.getInfo(value));
                 });
 
                 Promise.all(promisesArray).then(result => {

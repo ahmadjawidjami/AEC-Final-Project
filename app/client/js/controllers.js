@@ -60,7 +60,7 @@ angular.module("Blockstarter.controllers", [])
         .then(response => {
             console.log(response);
             $scope.myProjectRaw = response;
-            
+
             for (project of $scope.myProjectRaw) {
 
                 $scope.myProjectsList = [];
@@ -76,8 +76,17 @@ angular.module("Blockstarter.controllers", [])
         .catch(error => console.log(error));
 })
 
-.controller('CreatorsCtrl', function($scope, Api, $window, $rootScope) {
+.controller('CreatorsCtrl', function($scope, Api, $window, $rootScope, AuthService) {
     console.log("CreatorsCtrl");
+
+    Api
+        .getCreatedProjects(AuthService.getUser().address)
+        .then(response => {
+            console.log(response);
+
+
+        })
+        .catch(error => console.log(error));
 })
 
 .controller('BackersCtrl', function($scope, Api, $window, $rootScope) {
