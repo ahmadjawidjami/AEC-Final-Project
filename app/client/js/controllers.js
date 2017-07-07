@@ -84,7 +84,6 @@ angular.module("Blockstarter.controllers", [])
             .backProject(req)
             .then(response => {
                 console.log(response);
-                //window.location.reload();
                 $scope.project.fundingStatus = parseFloat($scope.project.fundingStatus) + parseFloat(amount);
                 $scope.project.finalFundings = parseFloat($scope.project.finalFundings) + parseFloat(amount);
                 $scope.project.goalReached = $scope.project.finalFundings >= $scope.project.fundingGoal;
@@ -172,10 +171,15 @@ angular.module("Blockstarter.controllers", [])
 
     // login
     $scope.login = user => {
-        AuthService
-            .login(user)
-            .then(msg => { $window.location.reload(); })
-            .catch(errMsg => { $scope.error = errMsg; });
+        if (typeof user.address !== 'number' || user.address < 0 || user.address > 9) {
+            $scope.error = "Invalid Address";
+        } else {
+            AuthService
+                .login(user)
+                .then(msg => { $window.location.reload(); })
+                .catch(errMsg => { $scope.error = errMsg; });
+        }
+
     };
 
     // blocks the user on the page until it isn't logged

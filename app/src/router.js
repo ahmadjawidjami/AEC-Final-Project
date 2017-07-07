@@ -20,14 +20,20 @@ module.exports = (app, web3) => {
     // TODO: Change route
     // Create a project
     app.post('/api/v1/projects', function(req, res, next) {
+
         logRequest(req);
         let request = req.body;
 
+        // set some additional values 
         request.token.decimals = 4;
-        // request.token.creator = web3.eth.accounts[0];
         request.project.token = "todo...";
-        // request.project.creator = web3.eth.accounts[0];
+        // convert account index to account address
+        request.token.creator = web3.eth.accounts[request.token.creator];
+        request.project.creator = web3.eth.accounts[request.project.creator];
 
+        console.log(request);
+
+        // Deploy the project  
         deployer
             .createToken(request.token)
             .then(result => {
@@ -56,17 +62,17 @@ module.exports = (app, web3) => {
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html
                 CreatorDB
                     .update(result.creator, query)
-                    .then(result => console.log(`resultssss: ${result}`))
+                    .then(result => console.log(result))
                     .catch(error => console.log(error));
 
                 let data = {
                     creator: result.creator,
                     project: result.address
                 };
-                var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
+                // var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
+                // set the scheduler
                 let s = scheduler.setScheduler({ deadline: deadline }, data);
-                console.log("asdfasdf");
-                res.send(r);
+                res.send(result);
 
             })
             .catch(error => res.send(error))
@@ -74,17 +80,16 @@ module.exports = (app, web3) => {
     });
 
     // Fund a project
-    // TODO: change mongo call in API v2
     app.post('/api/v1/projects/fund', function(req, res, next) {
 
         logRequest(req);
-        console.log(req.body);
         let funding = req.body;
+        funding.backer = web3.eth.accounts[req.body.backer];
 
         interactor
             .fundProject(funding)
             .then(result => {
-                let backer = req.body.backer;
+                let backer = funding.backer;
                 let query = { $addToSet: { projects: { address: funding.project } } };
 
                 // write on db
@@ -113,10 +118,7 @@ module.exports = (app, web3) => {
             .then(result => {
                 return interactor.getAllProjects(result);
             })
-            .then(result => {
-                console.log(result);
-                res.send(result);
-            })
+            .then(result => res.send(result))
             .catch(error => res.send(error));
 
 
@@ -124,36 +126,37 @@ module.exports = (app, web3) => {
 
     // Get all projects created by a creator
     app.get('/api/v1/projects/creator/:creator', function(req, res, next) {
+
         logRequest(req);
-        let query = { _id: req.params.creator }
+        // convert account index to account address
+        let creator = web3.eth.accounts[req.params.creator];
+        let query = { _id: creator }
         CreatorDB
             .getProjectsByAddress(query)
             .then(result => {
                 let projects = result[0].projects;
                 return interactor.getAllProjects(projects);
             })
-            .then(result => {
-                console.log(result);
-                res.send(result);
-            })
+            .then(result => res.send(result))
             .catch(error => res.send(error));
     });
 
     // Get all projects funded by a backer
     app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
+
         logRequest(req);
-        let query = { _id: req.params.backer }
+        // convert account index to account address
+        let backer = web3.eth.accounts[req.params.backer];
+        let query = { _id: backer }
+
         BackerDB
             .getProjectsByAddress(query)
             .then(result => {
-                console.log("RESULT", result);
+                console.log("Result\n", result);
                 let projects = result[0].projects;
                 return interactor.getAllProjects(projects);
             })
-            .then(result => {
-                console.log(result);
-                res.send(result);
-            })
+            .then(result => res.send(result))
             .catch(error => res.send(error));
     });
 
@@ -162,21 +165,17 @@ module.exports = (app, web3) => {
 
         logRequest(req);
         let data = req.params;
+
         interactor
             .showStatus(data)
-            .then(result => {
-                console.log(result);
-                res.send(result);
-            })
-            .catch(error => {
-                console.log(error);
-                res.send(error);
-            });
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
 
     });
 
     //Show project information
     app.get('/api/v1/projects/:project', function(req, res, next) {
+
         logRequest(req);
         let data = req.params;
 
@@ -188,12 +187,10 @@ module.exports = (app, web3) => {
 
     app.post('/api/v1/projects/withdraw', function(req, res, next) {
         logRequest(req);
-        // req = {
-        //     project
-        //     amount
-        //     creator
-        // }
+
         let data = req.body;
+        data.creator = web3.eth.accounts[data.creator];
+
         interactor
             .withdrawFunds(data)
             .then(result => res.send(result))
@@ -202,12 +199,10 @@ module.exports = (app, web3) => {
 
     app.post('/api/v1/projects/claim-shares', function(req, res, next) {
         logRequest(req);
-        // req = {
-        //     token
-        //     project
-        //     backer
-        // }
+
         let data = req.body;
+        data.creator = web3.eth.accounts[data.creator];
+
         interactor
             .claimShares(data)
             .then(result => res.send(result))
@@ -216,25 +211,10 @@ module.exports = (app, web3) => {
 
     // Log utility
     let logRequest = req => {
+        console.log("-------------------------------------------------------------");
         console.log(req.method + " on " + req.originalUrl);
+        console.log("params:\n", req.params);
+        console.log("body:\n", req.body);
     }
 
 }
-
-
-
-
-// let query = [{ $match: { _id: req.params.creator } }, { $unwind: "$projects" }, {
-//             $project: { _id: 0, address: "$projects.address", deadline: "$projects.deadline", token: "$projects.token" }
-//         }];
-
-//         CreatorDB
-//             .aggregate(query)
-//             .then(result => {
-//                 return interactor.getAllProjects(result);
-//             })
-//             .then(result => {
-//                 console.log(result);
-//                 res.send(result);
-//             })
-//             .catch(error => res.send(error));

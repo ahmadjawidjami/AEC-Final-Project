@@ -8,6 +8,10 @@ html {
     z-index: 1000
 }
 
+.text-center {
+    text-align: center;
+}
+
 
 /*.navbar-light {
   background-color: #ffffff;

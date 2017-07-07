@@ -69,7 +69,7 @@ module.exports = (web3) => {
         console.log('data', data);
         return new Promise((resolve, reject) => {
 
-            getProjectContract(data).getInfo({ from: data.creator }, (error, result) => {
+            getProjectContract(data).getInfo({ from: web3.eth.accounts[0] }, (error, result) => {
                 if (error)
                     reject(error);
                 else {
