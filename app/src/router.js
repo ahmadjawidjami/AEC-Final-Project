@@ -85,7 +85,7 @@ module.exports = (app, web3) => {
             .fundProject(funding)
             .then(result => {
                 let backer = req.body.backer;
-                let query = { $push: { "projects": { address: funding.project } } };
+                let query = { $addToSet: { projects: { address: funding.project } } };
 
                 // write on db
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html

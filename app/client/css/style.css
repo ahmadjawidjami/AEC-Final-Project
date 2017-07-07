@@ -14,7 +14,8 @@ html {
 }*/
 
 .navbar-custom {
-    background-color: #2196f3;
+    /*background-color: #2196f3;*/
+    background-color: #0275d8;
     border-radius: 0;
     text-transform: uppercase;
 }
@@ -163,6 +164,7 @@ html {
     text-align: center;
     background-color: #eceeef;
     border-radius: .25rem;
+    margin-bottom: 1rem;
 }
 
 .progress-bar-custom {

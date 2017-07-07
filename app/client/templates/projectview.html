@@ -1,9 +1,15 @@
-<div class="jumbotron event">
+<div class="jumbotron event" style="padding: 4rem 1rem 0.5rem 1rem;">
     <div class="container animated fadeInLeft">
         <h1 class="display-4">{{project.title}}</h1>
         <p class="text-mute"><em>{{project.address}}</em></p>
         <p class="text-muted large">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
+        <div class="text-right animated fadeInRight" ng-show="project.goalReached">
+            <h1 class="display-4"><span class="lead">Available: </span><strong> {{project.fundingStatus}} </strong><small>eth</small> </h1>
+
+        </div>
     </div>
+
+
 </div>
 <div class="container">
     <div class="row">
@@ -25,7 +31,7 @@
                 <!--/col-->
             </div>
             <div class="row">
-                <div class="col-xs-12 col-sm-6 ">
+                <div class="col-xs-12 col-sm-6">
                     <h3><small>Deadline:</small> <span class="lead">{{project.deadline | date: "dd MMM yyyy 'at' HH:mm"}}</span></h3>
                 </div>
                 <div class="input-group col-xs-12 col-sm-6 " ng-show="!project.goalReached">
@@ -33,6 +39,7 @@
                     <span class="input-group-btn"><button type="button" ng-click="fundProject(project.address, backAmount)" class="btn btn-primary"> Fund </button></span>
                 </div>
             </div>
+
             <hr/>
             <!--1st Large Banner Image -->
             <h3>Description</h3>

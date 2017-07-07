@@ -25,7 +25,7 @@ angular.module("Blockstarter.controllers", [])
     console.log("ProjectsCtrl");
     const user = AuthService.getUser();
     console.log(user);
-
+    $scope.projectList = [];
     Api
         .getAllProjects()
         .then(response => {
@@ -62,13 +62,16 @@ angular.module("Blockstarter.controllers", [])
     $scope.user = user;
     console.log(user);
     $scope.project = projectService.getProject();
-    // Api
-    //     .getProject($routeParams.project)
-    //     .then(response => {
-    //         console.log(response);
-    //         $scope.project = response;
-    //     })
-    //     .catch(error => console.log(error));
+
+    if (!$scope.project) {
+        Api
+            .getProject($routeParams.project)
+            .then(response => {
+                console.log(response);
+                $scope.project = response;
+            })
+            .catch(error => console.log(error));
+    }
 
     $scope.fundProject = (project, amount) => {
         const req = {
@@ -82,6 +85,9 @@ angular.module("Blockstarter.controllers", [])
             .then(response => {
                 console.log(response);
                 //window.location.reload();
+                $scope.project.fundingStatus = parseFloat($scope.project.fundingStatus) + parseFloat(amount);
+                $scope.project.finalFundings = parseFloat($scope.project.finalFundings) + parseFloat(amount);
+                $scope.project.goalReached = $scope.project.finalFundings >= $scope.project.fundingGoal;
             })
             .catch(error => console.error(error));
     }
@@ -96,7 +102,11 @@ angular.module("Blockstarter.controllers", [])
 
         Api
             .withdrawProject(req)
-            .then(response => console.log('Withdraw', response))
+            .then(response => {
+                console.log('Withdraw', response);
+                $scope.project.fundingStatus = parseFloat($scope.project.fundingStatus) - parseFloat(amount);
+
+            })
             .catch(error => console.error(error));
     }
 
@@ -115,9 +125,9 @@ angular.module("Blockstarter.controllers", [])
 
 })
 
-.controller('CreatorsCtrl', function($scope, Api, $window, $rootScope, AuthService) {
+.controller('CreatorsCtrl', function($scope, Api, $window, $rootScope, AuthService, projectService) {
     console.log("CreatorsCtrl");
-
+    $scope.projectList = [];
     Api
         .getCreatedProjects(AuthService.getUser().address)
         .then(response => {
@@ -126,14 +136,16 @@ angular.module("Blockstarter.controllers", [])
         })
         .catch(error => console.log(error));
 
-    $scope.openProject = (index) => {
-        console.log(`called index: ${index}`)
+    $scope.openProject = (project) => {
+        console.log(`called index: ${project}`)
+        projectService.addProject(project);
+        $window.location.href = `/#/projects/view/${project.address}`;
     }
 })
 
-.controller('BackersCtrl', function($scope, Api, $window, $rootScope, AuthService) {
+.controller('BackersCtrl', function($scope, Api, $window, $rootScope, AuthService, projectService) {
     console.log("BackersCtrl");
-
+    $scope.projectList = [];
     Api
         .getBackedProjects(AuthService.getUser().address)
         .then(response => {
@@ -141,6 +153,12 @@ angular.module("Blockstarter.controllers", [])
             $scope.projectList = response;
         })
         .catch(error => console.error(error));
+
+    $scope.openProject = (project) => {
+        console.log(`called index: ${project}`)
+        projectService.addProject(project);
+        $window.location.href = `/#/projects/view/${project.address}`;
+    }
 })
 
 .controller('LoginCtrl', function($scope, Api, $window, $rootScope, AuthService, $http, CONFIG, AUTH_EVENTS) {
