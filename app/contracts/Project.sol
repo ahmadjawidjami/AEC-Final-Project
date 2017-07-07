@@ -89,8 +89,8 @@ contract Project {
         fundingGoal = _fundingGoal; 
     }
 
-    function getInfo() constant returns(string, string, uint, uint, uint, bool) {
-        return(title, description, fundingGoal, fundingStatus, finalFundings, goalReached);
+    function getInfo() constant returns(string, string, uint, uint, uint, bool, address) {
+        return(title, description, fundingGoal, fundingStatus, finalFundings, goalReached, owner);
     }
 
     // Shows the status of the project
@@ -107,15 +107,15 @@ contract Project {
         }
     }
 
-    // Withdraw funds
-    function withdraw(uint _amount) onlyOwner campaignClosed{
+    // Withdraw funds  onlyOwner campaignClosed
+    function withdraw(uint _amount) {
     
         // Get the funds 
         _amount = _amount * 1 ether; 
         if (_amount <= fundingStatus) {
             withdrawn = true; 
             fundingStatus -= _amount; 
-            owner.transfer(_amount);
+            owner.send(_amount);
             WithdrawnFunds(true, fundingStatus); // return the fundingStatus after the withdraw 
         } else {
             throw; 

@@ -18,7 +18,7 @@ module.exports = (web3) => {
             // start a timer
             time.start();
             console.log(`Start creating token ${data.tokenName}...`);
-            
+
             // deploy the contract
             web3.eth
                 .contract(tokenContract.abi)
@@ -68,7 +68,7 @@ module.exports = (web3) => {
                     if (typeof contract.address !== 'undefined') {
                         // TODO: change creator
                         var result = {
-                            creator: web3.eth.accounts[0],
+                            creator: data.creator,
                             address: contract.address,
                             time: time.stop(),
                             instance: contract

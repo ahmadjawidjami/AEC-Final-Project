@@ -24,7 +24,6 @@ module.exports = class Database {
         return this.Model.find(query).select('projects -_id');
     }
 
-
     updatePull(query) {
 
         return this.Model.update({}, query, false, false);

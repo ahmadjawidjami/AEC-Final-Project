@@ -151,6 +151,30 @@ html {
     border-radius: 0;
 }
 
+.progress-custom {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    font-size: 1rem;
+    line-height: 1.4rem;
+    height: 1.4rem;
+    text-align: center;
+    background-color: #eceeef;
+    border-radius: .25rem;
+}
+
+.progress-bar-custom {
+    height: 1.4rem;
+    color: #fff;
+    background-color: #0275d8;
+}
+
+.text-right {
+    text-align: right;
+}
+
 .panel {
     margin-bottom: 20px;
     padding: 20px 10px;

@@ -51,8 +51,8 @@ module.exports = (web3) => {
                 else {
                     let ret = {
                         projectAddress: data.address,
-                        fundingGoal: result[0],
-                        fundingStatus: result[1],
+                        fundingGoal: web3.fromWei(result[0], 'ether'),
+                        fundingStatus: web3.fromWei(result[1], 'ether'),
                         goalReached: result[2]
                     }
                     resolve(ret);
@@ -76,10 +76,11 @@ module.exports = (web3) => {
                     project = {
                         title: result[0],
                         description: result[1],
-                        fundingGoal: result[2],
-                        fundingStatus: result[3],
-                        finalFundings: result[4],
+                        fundingGoal: web3.fromWei(result[2], 'ether'),
+                        fundingStatus: web3.fromWei(result[3], 'ether'),
+                        finalFundings: web3.fromWei(result[4], 'ether'),
                         goalReached: result[5],
+                        creator: result[6],
                         address: data.project || data.address,
                         deadline: data.deadline,
                         token: data.token
@@ -130,19 +131,19 @@ module.exports = (web3) => {
             console.log(2);
             console.log(data);
             // call the witdraw function on the contract 
-            let x = getProjectContract(data);
+            let x = getProjectContract(data).withdraw(data.amount, { from: data.creator, gas: 400000 });
             console.log(x);
-            x.withdraw(data.amount, { from: data.creator, gas: 400000 })
             console.log(data);
             console.log(3);
             // wait for the event to happen
-            withdrawnFunds
-                .watch()
-                .then(result => {
+            withdrawnFunds.watch((error, result) => {
+                if (error) {
                     withdrawnFunds.stopWatching();
-                    resolve(result)
-                })
-                .catch(error => { reject(error) });
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
         });
     }
 
