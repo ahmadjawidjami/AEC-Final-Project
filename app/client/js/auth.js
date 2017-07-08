@@ -33,7 +33,6 @@ angular.module('Blockstarter.authServices', ['Blockstarter.config'])
 .service('AuthService', function($q, $http, CONFIG, AUTH_EVENTS, $localStorage) {
     let LOCAL_TOKEN_KEY = 'BlockstarterAuth';
     var isAuthenticated = false;
-    console.log("AuthService: " + isAuthenticated);
 
     function loadUserCredentials() {
         let token = $localStorage.getObject(LOCAL_TOKEN_KEY);

@@ -11,10 +11,33 @@
 
 
 </div>
+<div ng-show="alertSucc" class="alert alert-success" style="margin-top: -2rem;">
+    <a class="close" ng-click="close()" aria-label="close">&times;</a>
+    <p>{{message}}</p>
+</div>
+<div ng-show="alertErr" class="alert alert-danger" style="margin-top: -2rem;">
+    <a class="close" ng-click="close()" aria-label="close">&times;</a>
+    <p>You don't have the right to claim shares</p>
+</div>
 <div class="container">
+
     <div class="row">
+
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 animated fadeInRight">
-            <span>Campaing progress: </span>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <button type="button" ng-show="project.goalReached" ng-click="claimShares(project.address, project.token)" class="btn btn-warning"> Claim Shares </button>
+                    <button type="button" ng-show="project.goalReached" ng-click="showShares(project.token)" class="btn btn-primary"> Show Shares </button>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="input-group" ng-show="project.goalReached">
+                        <input type="number" class="form-control" placeholder="" ng-model="withdrawAmount" />
+                        <span class="input-group-btn"><button type="button" ng-click="withdrawProject(project.address, withdrawAmount)" class="btn btn-warning"> Withdraw </button></span>
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin: 2rem 0 0.4rem 0">Campaing progress: </p>
             <div class="progress-custom lg w3-light-grey">
                 <div class="color-blue progress-bar-custom" ng-style="{width: project.finalFundings/project.fundingGoal*100 +'%'}">{{project.finalFundings/project.fundingGoal*100 | number : 1}}%</div>
             </div>
@@ -44,16 +67,6 @@
             <!--1st Large Banner Image -->
             <h3>Description</h3>
             <p class="lead">{{project.description}}</p>
-
-
-            <!--&& project.creator === user.address-->
-            <div class="input-group" ng-show="project.goalReached && project.creator === user.address">
-                <input type="number" class="form-control" placeholder="" ng-model="withdrawAmount" />
-                <span class="input-group-btn"><button type="button" ng-click="withdrawProject(project.address, withdrawAmount)" class="btn btn-warning"> Withdraw </button></span>
-            </div>
-            <div class="input-group" ng-show="project.goalReached && project.creator != user.address">
-                <span class="input-group-btn"><button type="button" ng-click="claimShares(project.address, project.token)" class="btn btn-warning"> Claim Shares </button></span>
-            </div>
 
         </div>
     </div>

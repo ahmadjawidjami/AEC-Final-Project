@@ -2,8 +2,7 @@ angular.module("Blockstarter.controllers", [])
 
 .controller('AppCtrl', function($scope, Api, $rootScope, $http, CONFIG, $window, AuthService) {
 
-    console.log("AppCtrl");
-    console.log(AuthService.isAuthenticated());
+    console.log("Application Ctrl");
 
     let logout = () => {
         AuthService.logout();
@@ -22,24 +21,30 @@ angular.module("Blockstarter.controllers", [])
 })
 
 .controller('ProjectsCtrl', function($scope, Api, $window, $rootScope, AuthService, projectService) {
-    console.log("ProjectsCtrl");
+    console.log("Projects Ctrl");
+    // scope variables
     const user = AuthService.getUser();
-    console.log(user);
     $scope.projectList = [];
+    $scope.loaded = false;
+    console.log(user);
+
+    // get all the projects
     Api
         .getAllProjects()
         .then(response => {
             console.log(response);
+            $scope.loaded = true;
             $scope.projectList = response;
         })
         .catch(error => console.log(error));
 
+    // open a selected project
     $scope.openProject = (project) => {
-        console.log(`called index: ${project}`)
         projectService.addProject(project);
         $window.location.href = `/#/projects/view/${project.address}`;
     }
 
+    // create the project
     $scope.createProject = (project, token) => {
         project.creator = token.creator = user.address;
         let request = { project, token };
@@ -59,10 +64,16 @@ angular.module("Blockstarter.controllers", [])
 .controller('ProjectCtrl', function($scope, Api, $window, $rootScope, $routeParams, AuthService, projectService) {
     console.log("Single Project Ctrl");
     const user = AuthService.getUser();
-    $scope.user = user;
-    console.log(user);
-    $scope.project = projectService.getProject();
 
+    // set scope variables
+    $scope.user = user;
+    $scope.alertSucc = false;
+    $scope.alertErr = false;
+    $scope.project = projectService.getProject();
+    console.log($scope.project);
+    console.log(user);
+
+    // if not provided by another controller, get project data from api
     if (!$scope.project) {
         Api
             .getProject($routeParams.project)
@@ -73,6 +84,7 @@ angular.module("Blockstarter.controllers", [])
             .catch(error => console.log(error));
     }
 
+    // fund the project
     $scope.fundProject = (project, amount) => {
         const req = {
             project,
@@ -86,11 +98,12 @@ angular.module("Blockstarter.controllers", [])
                 console.log(response);
                 $scope.project.fundingStatus = parseFloat($scope.project.fundingStatus) + parseFloat(amount);
                 $scope.project.finalFundings = parseFloat($scope.project.finalFundings) + parseFloat(amount);
-                $scope.project.goalReached = $scope.project.finalFundings >= $scope.project.fundingGoal;
+                $scope.project.goalReached = response.goalReached;
             })
             .catch(error => console.error(error));
     }
 
+    // withdraw from the project
     $scope.withdrawProject = (project, amount) => {
         const req = {
             project,
@@ -98,17 +111,48 @@ angular.module("Blockstarter.controllers", [])
             creator: user.address
         };
         console.log(req);
+        if (amount && amount > 0) {
+            Api
+                .withdrawProject(req)
+                .then(response => {
+                    console.log('Withdraw', response);
+                    $scope.project.fundingStatus = parseFloat($scope.project.fundingStatus) - parseFloat(amount);
 
-        Api
-            .withdrawProject(req)
-            .then(response => {
-                console.log('Withdraw', response);
-                $scope.project.fundingStatus = parseFloat($scope.project.fundingStatus) - parseFloat(amount);
+                })
+                .catch(error => console.error(error));
+        } else {
+            console.log("The amount must be a valid number");
+        }
 
-            })
-            .catch(error => console.error(error));
     }
 
+    // claim shares
+    $scope.showShares = (token) => {
+        const req = {
+            token,
+            backer: user.address
+        }
+
+        Api
+            .showShares(req)
+            .then(response => {
+                console.log('Show Shares', response);
+                if (Object.keys(response).length !== 0) {
+                    $scope.message = `Your Shares: ${response.shares}, total supply: ${response.totalSupply}`;
+                    $scope.alertSucc = true;
+                } else {
+                    $scope.alertErr = true;
+                }
+            })
+            .catch(error => console.error(errors));
+    }
+
+    $scope.close = () => {
+        $scope.alertSucc = false;
+        $scope.alertErr = false;
+    };
+
+    // claim shares
     $scope.claimShares = (project, token) => {
         const req = {
             token,
@@ -118,23 +162,35 @@ angular.module("Blockstarter.controllers", [])
 
         Api
             .claimShares(req)
-            .then(response => console.log('Claim Shares', response))
+            .then(response => {
+                console.log('Claim Shares', response);
+                if (Object.keys(response).length !== 0) {
+                    $scope.message = `You successfully claimed ${response.value} ${response.symbol}, ${(response.value/response.initialSupply*100).toFixed(2)}% of the project`;
+                    $scope.alertSucc = true;
+                } else {
+                    $scope.alertErr = true;
+                }
+            })
             .catch(error => console.error(errors));
     }
 
 })
 
 .controller('CreatorsCtrl', function($scope, Api, $window, $rootScope, AuthService, projectService) {
-    console.log("CreatorsCtrl");
+    console.log("Creators Ctrl");
     $scope.projectList = [];
+    $scope.loaded = false;
+    // get created projects
     Api
         .getCreatedProjects(AuthService.getUser().address)
         .then(response => {
             console.log(response);
+            $scope.loaded = true;
             $scope.projectList = response;
         })
         .catch(error => console.log(error));
 
+    // redirect to a selected project
     $scope.openProject = (project) => {
         console.log(`called index: ${project}`)
         projectService.addProject(project);
@@ -143,16 +199,20 @@ angular.module("Blockstarter.controllers", [])
 })
 
 .controller('BackersCtrl', function($scope, Api, $window, $rootScope, AuthService, projectService) {
-    console.log("BackersCtrl");
+    console.log("Backers Ctrl");
     $scope.projectList = [];
+    $scope.loaded = false;
+    // get backed projects
     Api
         .getBackedProjects(AuthService.getUser().address)
         .then(response => {
             console.log(response);
+            $scope.loaded = true;
             $scope.projectList = response;
         })
         .catch(error => console.error(error));
 
+    // redirect to a selected project
     $scope.openProject = (project) => {
         console.log(`called index: ${project}`)
         projectService.addProject(project);
@@ -161,11 +221,10 @@ angular.module("Blockstarter.controllers", [])
 })
 
 .controller('LoginCtrl', function($scope, Api, $window, $rootScope, AuthService, $http, CONFIG, AUTH_EVENTS) {
-    console.log("LoginCtrl");
+    console.log("Login Ctrl");
 
     // check if the user is already authenticated, if so, redirect home
     if (AuthService.isAuthenticated()) {
-        console.info("Auth");
         $window.location.href = "/#/projects/view";
     }
 
@@ -182,16 +241,11 @@ angular.module("Blockstarter.controllers", [])
 
     };
 
-    // blocks the user on the page until it isn't logged
+    // block the user on the page until it isn't logged
     $scope.$on('$locationChangeStart', (event) => {
         if (!AuthService.isAuthenticated()) {
             event.preventDefault();
             $window.location.href = "/#/login";
         }
     });
-})
-
-.controller('UserCtrl', function($scope, Api, $rootScope, $http, CONFIG, $window, AuthService, AUTH_EVENTS) {
-
-    console.log("UserCtrl");
 });

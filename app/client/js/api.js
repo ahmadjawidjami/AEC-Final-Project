@@ -62,6 +62,13 @@ angular.module('Blockstarter.api', ['Blockstarter.config'])
             .catch(error => error);
     }
 
+    this.showShares = function(data) {
+        return $http
+            .post(CONFIG.endpoint + '/projects/show/shares', data)
+            .then(response => response.data)
+            .catch(error => error);
+    }
+
     this.claimShares = function(data) {
         return $http
             .post(CONFIG.endpoint + '/projects/claim-shares', data)
@@ -69,15 +76,15 @@ angular.module('Blockstarter.api', ['Blockstarter.config'])
             .catch(error => error);
     }
 
-        // self.getUsers = function() {
-        //     return $http.get(CONFIG.endpoint + CONFIG.users).then(
-        //         function(response) {
-        //             return response.data;
-        //         },
-        //         function(error) {
-        //             return error;
-        //         });
-        // };
+    // self.getUsers = function() {
+    //     return $http.get(CONFIG.endpoint + CONFIG.users).then(
+    //         function(response) {
+    //             return response.data;
+    //         },
+    //         function(error) {
+    //             return error;
+    //         });
+    // };
 
     // self.getCurrentUser = function() {
     //     return $http.get(CONFIG.endpoint + CONFIG.user).then(function(result) {

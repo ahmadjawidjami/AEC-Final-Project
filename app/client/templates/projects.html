@@ -12,26 +12,23 @@
             </div>
             <hr />
             <div class="left-info-fixed">
+                <div><img style="width:100%;" ng-hide="loaded" src="../css/images/loading.gif" /> </div>
                 <ul class="list-group">
                     <a class="list-group-item custom-list-group-item" ng-repeat="project in projectList | filter: projectFilter" ng-click="openProject(project)">
                         <!--<button type="button" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#investInProjectModal" ng-click="open()">Back</button>-->
-                        <p class="pull-right text-right">Ends: {{project.deadline | date: "dd-MMM-yyyy 'at' HH:mm"}}</p>
-                        <h4 class="list-group-item-heading">{{project.title}}</h4>
-                        <p class="text-mute"><mark><em>{{project.address}}</em></mark></p>
-                        <p class="text-muted">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
+                        <p class="pull-right text-right">Ends: {{project.deadline | date: "dd MMM yyyy 'at' HH:mm"}}</p>
+
+                        <h3 class="list-group-item-heading">{{project.title}}</h3>
+                        <p class=""><i>{{project.address}}</i></p>
+                        <p class="text-mute">Goal reached: <span class="label" ng-class=" project.goalReached ? 'label-success' : 'label-warning'">{{project.goalReached}}</span></p>
                         <hr />
                         <p class="">
-                            <b>Description:</b> {{project.description}}
+                            <b>Description:</b><br/> {{project.description}}
                         </p>
                         <span><b>Campaing progress:</b></span>
                         <div class="progress-custom lg w3-light-grey">
                             <div class="color-blue progress-bar-custom" ng-style="{width: project.finalFundings/project.fundingGoal*100 +'%'}">{{project.finalFundings/project.fundingGoal*100 | number : 1}}%</div>
                         </div>
-
-                        <span>
-                            <b>Funding Goal:</b> {{project.fundingGoal}} eth<br />
-                            <b>Amount Raised:</b> {{project.finalFundings}} eth
-                        </span>
 
                     </a>
                 </ul>

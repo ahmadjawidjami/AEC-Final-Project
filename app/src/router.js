@@ -17,7 +17,6 @@ module.exports = (app, web3) => {
         res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén, Jamiulahmadi, Akhlaqi, Ayobi, Sajid)!\n");
     });
 
-    // TODO: Change route
     // Create a project
     app.post('/api/v1/projects', function(req, res, next) {
 
@@ -160,7 +159,7 @@ module.exports = (app, web3) => {
             .catch(error => res.send(error));
     });
 
-    //Show project status
+    // Show project status
     app.get('/api/v1/projects/status/:project', function(req, res, next) {
 
         logRequest(req);
@@ -173,7 +172,7 @@ module.exports = (app, web3) => {
 
     });
 
-    //Show project information
+    // Show project information
     app.get('/api/v1/projects/:project', function(req, res, next) {
 
         logRequest(req);
@@ -185,6 +184,7 @@ module.exports = (app, web3) => {
             .catch(error => res.send(error));
     });
 
+    // Withdraw funds from the project
     app.post('/api/v1/projects/withdraw', function(req, res, next) {
         logRequest(req);
 
@@ -197,16 +197,34 @@ module.exports = (app, web3) => {
             .catch(error => res.send(error));
     });
 
+    // Show project shares 
+    app.post('/api/v1/projects/show/shares', function(req, res, next) {
+        logRequest(req);
+
+        let data = req.body;
+        data.backer = web3.eth.accounts[data.backer];
+
+        interactor
+            .showShares(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+
+
+    });
+
+    // Claim project shares 
     app.post('/api/v1/projects/claim-shares', function(req, res, next) {
         logRequest(req);
 
         let data = req.body;
-        data.creator = web3.eth.accounts[data.creator];
+        data.backer = web3.eth.accounts[data.backer];
 
         interactor
             .claimShares(data)
             .then(result => res.send(result))
             .catch(error => res.send(error));
+
+
     });
 
     // Log utility
