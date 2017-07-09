@@ -4,15 +4,19 @@ FROM node:7.1-slim
 RUN mkdir -p /myapp/src
 WORKDIR /myapp
 
+RUN mkdir /myapp/rpc-data
+
+
+
 # Install app dependencies
 ADD . /myapp/
 RUN npm install -g ethereumjs-testrpc@4.0.0
 RUN npm install
 
-#RUN nohup testrpc &
+#CMD testrpc &
 
 # Add app source
 ADD src /myapp/src
 
 EXPOSE 8080
-CMD [ "npm", "start" ]
+CMD [ "sh", "entry_point.sh" ]
