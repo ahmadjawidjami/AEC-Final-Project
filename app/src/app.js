@@ -21,12 +21,12 @@ const LOCAL_APP_PORT = 8080;
 const PUBLIC_APP_PORT = process.env.PUBLIC_APP_PORT || LOCAL_APP_PORT;
 
 // ====== uncomment this when you have docker set up
-// const MONGO_HOST = process.env.MONGO_HOST;
-// const MONGO_PORT = process.env.MONGO_PORT;
+const MONGO_HOST = process.env.MONGO_HOST;
+const MONGO_PORT = process.env.MONGO_PORT;
 
 // ====== detete this when docker
-const MONGO_HOST = "localhost";
-const MONGO_PORT = 27017;
+// const MONGO_HOST = "localhost";
+// const MONGO_PORT = 27017;
 
 // MongoDB connection
 const MONGO_URL = 'mongodb://' + MONGO_HOST + ':' + MONGO_PORT + '/dev';
