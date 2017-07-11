@@ -1,11 +1,6 @@
 const Database = require("./database");
-
-//var projects = jsonfile.readFileSync(path.resolve(__dirname, config.projectsFile));
-
-// TODO: move it in API v2
 const CreatorDB = new Database(require('../models/creators'));
 const BackerDB = new Database(require('../models/backers'));
-
 
 module.exports = (app, web3) => {
 
@@ -16,52 +11,28 @@ module.exports = (app, web3) => {
 
     console.info("API running...");
 
-
-    app.get('/', function(req, res) {
-        var initialState = {
-            items: [
-                'document your code',
-                'drop the kids off at the pool',
-                '</script><script>alert(666)</script>'
-            ],
-            text: ''
-        };
-        res.render('Html', { data: initialState });
-    });
-
     // Get Hello World
     app.get('/api/v1/', function(req, res, next) {
         logRequest(req);
         res.send("Hello, this is group E (Boiani, Sibani, Stojkovski, Vilén, Jamiulahmadi, Akhlaqi, Ayobi, Sajid)!\n");
     });
 
-    // TODO: Change route
+    // Create a project
     app.post('/api/v1/projects', function(req, res, next) {
-        logRequest(req); <<
-        << << < HEAD
-        let request = req.body; ===
-        === =
 
-        // Mockup request
-        let request = {
-                token: {
-                    initialSupply: 10,
-                    tokenName: "Test Token",
-                    tokenSymbol: "PS",
-                    decimals: 4,
-                    creator: web3.eth.accounts[0]
-                },
-                project: {
-                    title: "Test Title",
-                    description: "Frist Project With Token",
-                    goal: 10,
-                    token: "todo...",
-                    duration: 0.1, //minutes
-                    price: 2,
-                    creator: web3.eth.accounts[0]
-                }
-            } >>>
-            >>> > apis_final
+        logRequest(req);
+        let request = req.body;
+
+        // set some additional values 
+        request.token.decimals = 4;
+        request.project.token = "todo...";
+        // convert account index to account address
+        request.token.creator = web3.eth.accounts[request.token.creator];
+        request.project.creator = web3.eth.accounts[request.project.creator];
+
+        console.log(request);
+
+        // Deploy the project  
         deployer
             .createToken(request.token)
             .then(result => {
@@ -74,7 +45,7 @@ module.exports = (app, web3) => {
             })
             .then(result => {
 
-                console.log(`Inserting ${request.project.title} into ${result.creator} projects list`);
+                console.log(`Inserting ${request.project.title} into ${result.creator} projects list by ${request.project.creator}`);
                 let deadline = new Date().setTime(new Date().getTime() + (request.project.duration * 60 * 1000));
                 //write to mongoDB
                 let query = {
@@ -90,17 +61,17 @@ module.exports = (app, web3) => {
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html
                 CreatorDB
                     .update(result.creator, query)
-                    .then(result => console.log(`resultssss: ${result}`))
+                    .then(result => console.log(result))
                     .catch(error => console.log(error));
 
                 let data = {
                     creator: result.creator,
                     project: result.address
                 };
-                var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
+                // var r = `Project ${request.project.title} with address ${result.address} created in ${result.time} seconds\n`;
+                // set the scheduler
                 let s = scheduler.setScheduler({ deadline: deadline }, data);
-                console.log("asdfasdf");
-                res.send(r);
+                res.send(result);
 
             })
             .catch(error => res.send(error))
@@ -108,18 +79,17 @@ module.exports = (app, web3) => {
     });
 
     // Fund a project
-    // TODO: change mongo call in API v2
     app.post('/api/v1/projects/fund', function(req, res, next) {
 
         logRequest(req);
-
         let funding = req.body;
+        funding.backer = web3.eth.accounts[req.body.backer];
 
         interactor
             .fundProject(funding)
             .then(result => {
-                let backer = req.body.backer;
-                let query = { $push: { "projects": { address: funding.project } } };
+                let backer = funding.backer;
+                let query = { $addToSet: { projects: { address: funding.project } } };
 
                 // write on db
                 // TODO: change the promise: http://mongoosejs.com/docs/promises.html
@@ -139,75 +109,72 @@ module.exports = (app, web3) => {
     // Get all projects
     app.get('/api/v1/projects', function(req, res, next) {
         logRequest(req);
-        // TODO: must be implemented
 
-        // example...
         CreatorDB
-            .getAll()
+            .aggregate([{ $unwind: "$projects" }, {
+                $project: { _id: 0, address: "$projects.address", deadline: "$projects.deadline", token: "$projects.token" }
+            }])
+            .then(result => {
+                return interactor.getAllProjects(result);
+            })
             .then(result => res.send(result))
             .catch(error => res.send(error));
+
 
     });
 
     // Get all projects created by a creator
     app.get('/api/v1/projects/creator/:creator', function(req, res, next) {
+
         logRequest(req);
-        let query = { _id: req.params.creator }
+        // convert account index to account address
+        let creator = web3.eth.accounts[req.params.creator];
+        let query = { _id: creator }
         CreatorDB
             .getProjectsByAddress(query)
             .then(result => {
-
                 let projects = result[0].projects;
-
-                let promisesArray = [];
-
-                for (var index = 0; index < projects.length; index++) {
-
-                    let data = { project: projects[index].address };
-
-                    promisesArray[index] = interactor.showStatus(data);
-                }
-
-                Promise.all(promisesArray).then(result => {
-
-                    console.log(result);
-                    res.send(result);
-
-                }).catch(error => console.log(error));
+                return interactor.getAllProjects(projects);
             })
+            .then(result => res.send(result))
             .catch(error => res.send(error));
     });
 
     // Get all projects funded by a backer
     app.get('/api/v1/projects/backer/:backer', function(req, res, next) {
-        logRequest(req);
-        let query = { _id: req.params.backer }
 
-        BackerDB.getProjectsByAddress(query).then(
-                result => res.send(result))
+        logRequest(req);
+        // convert account index to account address
+        let backer = web3.eth.accounts[req.params.backer];
+        let query = { _id: backer }
+
+        BackerDB
+            .getProjectsByAddress(query)
+            .then(result => {
+                console.log("Result\n", result);
+                let projects = result[0].projects;
+                return interactor.getAllProjects(projects);
+            })
+            .then(result => res.send(result))
             .catch(error => res.send(error));
     });
 
-    //Show project status
+    // Show project status
     app.get('/api/v1/projects/status/:project', function(req, res, next) {
 
         logRequest(req);
         let data = req.params;
+
         interactor
             .showStatus(data)
-            .then(result => {
-                console.log(result);
-                res.send(result);
-            })
-            .catch(error => {
-                console.log(error);
-                res.send(error);
-            });
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
 
     });
 
-    //Show project information
+    // Show project information
     app.get('/api/v1/projects/:project', function(req, res, next) {
+
         logRequest(req);
         let data = req.params;
 
@@ -217,9 +184,55 @@ module.exports = (app, web3) => {
             .catch(error => res.send(error));
     });
 
+    // Withdraw funds from the project
+    app.post('/api/v1/projects/withdraw', function(req, res, next) {
+        logRequest(req);
+
+        let data = req.body;
+        data.creator = web3.eth.accounts[data.creator];
+
+        interactor
+            .withdrawFunds(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+    });
+
+    // Show project shares 
+    app.post('/api/v1/projects/show/shares', function(req, res, next) {
+        logRequest(req);
+
+        let data = req.body;
+        data.backer = web3.eth.accounts[data.backer];
+
+        interactor
+            .showShares(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+
+
+    });
+
+    // Claim project shares 
+    app.post('/api/v1/projects/claim-shares', function(req, res, next) {
+        logRequest(req);
+
+        let data = req.body;
+        data.backer = web3.eth.accounts[data.backer];
+
+        interactor
+            .claimShares(data)
+            .then(result => res.send(result))
+            .catch(error => res.send(error));
+
+
+    });
+
     // Log utility
     let logRequest = req => {
+        console.log("-------------------------------------------------------------");
         console.log(req.method + " on " + req.originalUrl);
+        console.log("params:\n", req.params);
+        console.log("body:\n", req.body);
     }
 
 }

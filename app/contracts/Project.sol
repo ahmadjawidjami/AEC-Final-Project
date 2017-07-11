@@ -20,10 +20,7 @@ pragma solidity ^0.4.4;
 // Web3 examples https://github.com/fivedogit/solidity-baby-steps/blob/master/contracts/30_endowment_retriever.sol
 // Tokens: https://www.ethereum.org/token
 
-// TODO 
-// Decide if convert to wei in the blockchain or in web3 
-
-contract ShareToken { function transfer(address receiver, uint amount){  } }
+contract ShareToken { function transfer(address receiver, uint256 amount){  } }
 
 contract Project {
     // State parameters
@@ -35,13 +32,13 @@ contract Project {
     uint private finalFundings; 
     
     bool private goalReached; 
-    bool private withdrawn; 
+    bool private withdrawn;
+    address private tokenAddress; 
     ShareToken public token; 
     uint public availableTokens;
+    
     // v 2.0 extension 
     uint public deadline; 
-    string public fundingStart; 
-    string public fundingEnd;
     
     // Utility struct
     struct Backer {
@@ -71,6 +68,10 @@ contract Project {
         if (goalReached) _;
     }
 
+    modifier goalNotMet() {
+        if (!goalReached && now >= deadline) _;
+    }
+
     // Constructor
     function Project(string _title, string _description, uint _fundingGoal, uint _availableTokens, ShareToken _tokenAdress, uint _campaignDuration) {
         owner = msg.sender;
@@ -79,6 +80,7 @@ contract Project {
         fundingGoal = _fundingGoal * 1 ether; 
         availableTokens = _availableTokens;
         deadline = now + _campaignDuration * 1 minutes; 
+        tokenAddress = _tokenAdress;
         token = ShareToken(_tokenAdress);
     }
 
@@ -89,8 +91,8 @@ contract Project {
         fundingGoal = _fundingGoal; 
     }
 
-    function getInfo() constant returns(string, string, uint, uint, uint, bool) {
-        return(title, description, fundingGoal, fundingStatus, finalFundings, goalReached);
+    function getInfo() constant returns(string, string, uint, uint, uint, bool, address, uint, address) {
+        return(title, description, fundingGoal, fundingStatus, finalFundings, goalReached, owner, deadline, tokenAddress);
     }
 
     // Shows the status of the project
@@ -98,48 +100,50 @@ contract Project {
         return(fundingGoal, fundingStatus, goalReached);
     }
 
+    // check if the goal has been reached
     function check() onlyOwner returns(bool result) {
         result = false; 
-        if(!goalReached && now > deadline) {
+        if(!goalReached && now >= deadline) {
             kill();
         } else {
             result = true; 
         }
     }
 
-    // Withdraw funds
-    function withdraw(uint _amount) onlyOwner {
-        assert(goalReached);
+    // withdraw funds  
+    function withdraw(uint _amount) onlyOwner campaignClosed returns(bool result) {
+        result = false;
         // Get the funds 
         _amount = _amount * 1 ether; 
         if (_amount <= fundingStatus) {
             withdrawn = true; 
             fundingStatus -= _amount; 
-            owner.transfer(_amount);
+            owner.send(_amount);
             WithdrawnFunds(true, fundingStatus); // return the fundingStatus after the withdraw 
+            result = true;
         } else {
-            throw; 
-        }
-         
+            throw;
+        }  
     }
 
     // Claim shares
-    function claimShares() campaignClosed onlyAllowedBacker returns(bool)  {
+    function claimShares() onlyAllowedBacker campaignClosed returns(bool result)  {
+        result = false;
         address sender = msg.sender;
         // set the claimed field true
         fundings[sender].claimed = true; 
         // give the token to the backer 
-        token.transfer(sender, fundings[sender].amount/finalFundings * availableTokens);
-        return false; 
+        token.transfer(sender, fundings[sender].amount * availableTokens / finalFundings );
+        result = true; 
     }
 
     // Contract killer
-    function kill() onlyOwner {
+    function kill() goalNotMet {
 
         // Give back the money to all the backers 
         for (uint i=0; i< iterator.length; i++) {
             address key = iterator[i]; 
-            key.transfer(fundings[key].amount);
+            key.send(fundings[key].amount);
         }
         selfdestruct(msg.sender);
     }

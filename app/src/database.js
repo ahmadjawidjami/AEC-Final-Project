@@ -4,8 +4,16 @@ module.exports = class Database {
         this.Model = model;
     }
 
-    getAll() {
-        return this.Model.find();
+    aggregate(query) {
+        return this.Model.aggregate(query);
+    }
+
+    get(query) {
+        return this.Model.findOne(query);
+    }
+
+    getAll(query) {
+        return this.Model.find(query);
     }
 
     update(data, query) {
@@ -16,10 +24,9 @@ module.exports = class Database {
         return this.Model.find(query).select('projects -_id');
     }
 
-
     updatePull(query) {
 
-        return this.Model.update({}, query, false, false);
+        return this.Model.update({}, query, { "multi": true });
     }
 
 }

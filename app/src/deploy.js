@@ -1,5 +1,5 @@
 var projectContract = require("../build/contracts/Project.json");
-var tokenContract = require("../build/contracts/ProejctShare.json");
+var tokenContract = require("../build/contracts/ShareToken.json");
 
 // Unlock the account
 // let unlockAccount = () => {
@@ -18,7 +18,7 @@ module.exports = (web3) => {
             // start a timer
             time.start();
             console.log(`Start creating token ${data.tokenName}...`);
-            
+            console.log(data);
             // deploy the contract
             web3.eth
                 .contract(tokenContract.abi)
@@ -27,7 +27,7 @@ module.exports = (web3) => {
                     data: tokenContract.unlinked_binary,
                     gas: '4700000'
                 }, function(error, contract) {
-                    // console.log(e, c);
+
                     if (error)
                         reject(error);
 
@@ -53,7 +53,6 @@ module.exports = (web3) => {
             console.log(`Start deploying project ${data.title}...`);
 
             // deploy the contract
-            // TODO: change creator
             web3.eth
                 .contract(projectContract.abi)
                 .new(data.title, data.description, data.goal, data.price, data.token, data.duration, {
@@ -66,9 +65,9 @@ module.exports = (web3) => {
                         reject(error);
 
                     if (typeof contract.address !== 'undefined') {
-                        // TODO: change creator
+
                         var result = {
-                            creator: web3.eth.accounts[0],
+                            creator: data.creator,
                             address: contract.address,
                             time: time.stop(),
                             instance: contract

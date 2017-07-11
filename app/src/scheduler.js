@@ -5,21 +5,26 @@ module.exports = (interactor, CreatorDB, BackerDB) => {
             .showStatus(data)
             .then(result => {
                 if (!result.goalReached) {
+                    console.log('inside kill', data);
+                    //let query = { $pull: { "projects": { address: data.project } } }
+                    let query = { "$pull": { "projects": { "address": { "$in": [data.project] } } } };
+                    //remove the project from array of creator projects
+                    // CreatorDB
+                    //     .updatePull(query)
+                    //     .then(result => console.log(result))
+                    //     .catch(error => console.log(error));
 
-                    let query = { $pull: { "projects": { address: data.project } } }
-                        //remove the project from array of creator projects
-                    CreatorDB
-                        .updatePull(query)
-                        .then(result => console.log(result))
+                    // //remove project reference to backers
+                    // BackerDB
+                    //     .updatePull(query)
+                    //     .then(result => console.log(result))
+                    //     .catch(error => console.log(error));
+
+                    Promise
+                        .all([BackerDB.updatePull(query), CreatorDB.updatePull(query)])
+                        .then(result => interactor.kill(data))
                         .catch(error => console.log(error));
 
-                    //remove project reference to backers
-                    BackerDB
-                        .updatePull(query)
-                        .then(result => console.log(result))
-                        .catch(error => console.log(error));
-
-                    interactor.kill(data);
                 }
             });
     }
