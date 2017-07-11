@@ -36,7 +36,7 @@ Dev Tools:
 - Client: Angular.js
 
 
-## Tasks (24; 6 done, 8 in progress, 10 todo)
+## Tasks (25; 25 done, 0 in progress, 0 todo)
 - Project contract: withdraw funds (only owner) 
 - Project contract: claim project shares (only backers) 
 - MongoDB Connection [ X ]
