@@ -49,6 +49,9 @@ angular.module("Blockstarter.controllers", [])
         project.creator = token.creator = user.address;
         let request = { project, token };
         console.log(request);
+        if (project.duration < 1) {
+            project.duration = 1;
+        }
 
         Api
             .addProject(request)

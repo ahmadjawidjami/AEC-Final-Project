@@ -26,7 +26,7 @@ module.exports = class Database {
 
     updatePull(query) {
 
-        return this.Model.update({}, query, false, false);
+        return this.Model.update({}, query, { "multi": true });
     }
 
 }

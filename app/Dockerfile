@@ -9,7 +9,11 @@ RUN mkdir /myapp/rpc-data
 
 
 # Install app dependencies
-ADD . /myapp/
+ADD build /myapp/
+ADD client /myapp/
+ADD models /myapp/
+ADD resources /myapp/
+ADD src /myapp/
 RUN npm install -g ethereumjs-testrpc@4.0.0
 RUN npm install
 
