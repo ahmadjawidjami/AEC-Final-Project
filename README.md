@@ -1,14 +1,14 @@
 # BlockStarter 4.0 Final Project
 
 Group E
-- Ahmad Jawid Jamiulahmadi (380457)
-- Aqa Mustafa Akhlaqi ()
-- Filippo Boiani (387680)
-- Gabriel Vilen (387555)
-- Hekmatullah Sajid ()
-- Riccardo Sibani (382708)
-- Rohullah Ayobi (380448)
-- Stefan Stojkovski (387529) 
+- Ahmad Jawid Jamiulahmadi (380457) @jawid
+- Aqa Mustafa Akhlaqi () @akhlaqi
+- Filippo Boiani (387680) @filippoboiani
+- Gabriel Vilen (387555) @gavil
+- Hekmatullah Sajid () @hekmatullah.sajid
+- Riccardo Sibani (382708) @pinair
+- Rohullah Ayobi (380448) @rohullahayobi
+- Stefan Stojkovski (387529) @stefan.stojkovski
 
 ## Project extension
 - A: kill a project when the time is up and the goal is not met. 
