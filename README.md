@@ -2,11 +2,11 @@
 
 Group E
 - Ahmad Jawid Jamiulahmadi (380457) @jawid
-- Aqa Mustafa Akhlaqi () @akhlaqi
-- Filippo Boiani (387680) @filippoboiani
+- Aqa Mustafa Akhlaqi (380455) @akhlaqi
+- Filippo Boiani (387680) @filippo.boiani
 - Gabriel Vilen (387555) @gavil
-- Hekmatullah Sajid () @hekmatullah.sajid
-- Riccardo Sibani (382708) @pinair
+- Hekmatullah Sajid (380454) @hekmatullah.sajid
+- Riccardo Sibani (382708) @riccardo.sibani
 - Rohullah Ayobi (380448) @rohullahayobi
 - Stefan Stojkovski (387529) @stefan.stojkovski
 
