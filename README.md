@@ -19,6 +19,12 @@ Group E
 
     `your-docker-machine-ip:4000`
 
+## Ho to test it
+- To log in 
+    - It is only necessaray to specify a number **from 0 to 9**, this numebrs will be mapped to the related web.eth.accounts[] account. 
+- Create a project 
+    - Specify the number of available shares (in form of tokens)
+    - Specify how much of them will be available 
 
 ## Api 
 
