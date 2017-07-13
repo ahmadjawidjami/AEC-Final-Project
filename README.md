@@ -26,11 +26,7 @@ Method | Route | Params | Description
 --- | --- | ---
 *GET* | `/api/v1/` | | Get Hello World
 *POST* | `/api/v1/projects` |  | Create a project
-*POST* | `/api/v1/projects/fund` | { 
-  "project": "project address",
-  "backer": "backer address",
-  "amount": 6
-}  | Fund a project
+*POST* | `/api/v1/projects/fund` | \"project": "project address",\"backer": "backer address",\"amount": 6  | Fund a project
 *GET* | `/api/v1/projects` | | Get all projects
 *GET* | `/api/v1/projects/creator/:creator` | | Get all projects created by a creator
 *GET* | `/api/v1/projects/backer/:backer ` | | Get all projects funded by a backer
