@@ -19,19 +19,24 @@ Group E
 
     `your-docker-machine-ip:4000`
 
+
 ## Api 
 
-Method | Route | Description
+Method | Route | Params | Description
 --- | --- | ---
-*GET* | `/api/v1/` | Get Hello World
-*POST* | `/api/v1/projects` | Create a project
-*POST* | `/api/v1/projects/fund` | Fund a project
-*GET* | `/api/v1/projects` | Get all projects
-*GET* | `/api/v1/projects/creator/:creator` | Get all projects created by a creator
-*GET* | `/api/v1/projects/backer/:backer ` | Get all projects funded by a backer
-*GET* | `/api/v1/projects/status/:project ` | Show project status
-*GET* | `/api/v1/projects/:project ` | Show project information
-*POST* | `/api/v1/projects/withdraw ` | Withdraw funds from the project
+*GET* | `/api/v1/` | | Get Hello World
+*POST* | `/api/v1/projects` |  | Create a project
+*POST* | `/api/v1/projects/fund` | { 
+  "project": "project address",
+  "backer": "backer address",
+  "amount": 6
+}  | Fund a project
+*GET* | `/api/v1/projects` | | Get all projects
+*GET* | `/api/v1/projects/creator/:creator` | | Get all projects created by a creator
+*GET* | `/api/v1/projects/backer/:backer ` | | Get all projects funded by a backer
+*GET* | `/api/v1/projects/status/:project ` | | Show project status
+*GET* | `/api/v1/projects/:project ` | | Show project information
+*POST* | `/api/v1/projects/withdraw ` | | Withdraw funds from the project
 
 ## Project extension
 - A: kill a project when the time is up and the goal is not met. 
