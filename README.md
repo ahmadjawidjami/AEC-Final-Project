@@ -43,19 +43,18 @@ Requst body:
 ```javascript
 {
     token: {
-        initialSupply: 10,
+        initialSupply: 100, // number of shares
         tokenName: "Example Token",
         tokenSymbol: "Symbol",
-        decimals: 4,
-        creator: "0x ..."
+        creator: "0x ..." // creator address
     },
     project: {
         title: "Example",
         description: "Frist Project With Token",
-        goal: 100,
-        duration: 120, //minutes
-        sharesAvailable: 50,
-        creator: "0x ..."
+        goal: 100, // in ethers
+        duration: 120, // in minutes
+        sharesAvailable: 50, // number of tokens available (50 %)
+        creator: "0x ..." // creator address
     }
 }
 ```
