@@ -10,9 +10,6 @@ Group E
 - Rohullah Ayobi (380448) @rohullahayobi
 - Stefan Stojkovski (387529) @stefan.stojkovski
 
-## Project extension
-- A: kill a project when the time is up and the goal is not met. 
-
 ## How to run it
 - Go to project folder. 
 - Run the following command: 
@@ -21,6 +18,21 @@ Group E
 - Open your browser at the following link:
 
     `your-docker-machine-ip:4000`
+
+## Api 
+- GET   /api/v1/    "Get Hello World"
+- POST  /api/v1/projects    "Create a project"
+- POST  /api/v1/projects/fund   "Fund a project"
+- GET   /api/v1/projects    "Get all projects"
+- GET   /api/v1/projects/creator/:creator   "Get all projects created by a creator"
+- GET   /api/v1/projects/backer/:backer     "Get all projects funded by a backer"
+- GET   /api/v1/projects/status/:project    "Show project status"
+- GET   /api/v1/projects/:project           "Show project information"
+- POST  /api/v1/projects/withdraw           "Withdraw funds from the project"
+
+## Project extension
+- A: kill a project when the time is up and the goal is not met. 
+
 
 ## Metodology 
 - Scrum (1 week iteration)
