@@ -23,16 +23,42 @@ Group E
 ## Api 
 
 Method | Route | Params | Description
---- | --- | ---
-*GET* | `/api/v1/` | | Get Hello World
-*POST* | `/api/v1/projects` |  | Create a project
-*POST* | `/api/v1/projects/fund` | \"project": "project address",\"backer": "backer address",\"amount": 6  | Fund a project
-*GET* | `/api/v1/projects` | | Get all projects
-*GET* | `/api/v1/projects/creator/:creator` | | Get all projects created by a creator
-*GET* | `/api/v1/projects/backer/:backer ` | | Get all projects funded by a backer
+--- | --- | --- | ---
+*GET* | `/api/v1/` |  | Get Hello World
+*POST* | `/api/v1/projects` | *see below* | Create a project
+*POST* | `/api/v1/projects/fund` | - project<br> - backer<br> - amount | Fund a project
+*GET* | `/api/v1/projects` |  | Get all projects
+*GET* | `/api/v1/projects/creator/:creator` |  | Get all projects created by a creator
+*GET* | `/api/v1/projects/backer/:backer ` |  | Get all projects funded by a backer
 *GET* | `/api/v1/projects/status/:project ` | | Show project status
-*GET* | `/api/v1/projects/:project ` | | Show project information
-*POST* | `/api/v1/projects/withdraw ` | | Withdraw funds from the project
+*GET* | `/api/v1/projects/:project ` |  | Show project information
+*POST* | `/api/v1/projects/withdraw ` | - project<br> - creator<br> - amount  | Withdraw funds from the project
+*POST* | `/api/v1/projects/claim-shares ` | - project<br> - backer<br> - token  | Claim project shares
+*POST* | `/api/v1/projects/show/shares ` | - project<br> - backer  | Show the shares owned by a backer
+
+### Create Project 
+
+Requst body: 
+
+```javascript
+{
+    token: {
+        initialSupply: 10,
+        tokenName: "Example Token",
+        tokenSymbol: "Symbol",
+        decimals: 4,
+        creator: "0x ..."
+    },
+    project: {
+        title: "Example",
+        description: "Frist Project With Token",
+        goal: 100,
+        duration: 120, //minutes
+        sharesAvailable: 50,
+        creator: "0x ..."
+    }
+}
+```
 
 ## Project extension
 - A: kill a project when the time is up and the goal is not met. 
@@ -53,8 +79,8 @@ Dev Tools:
 
 
 ## Tasks (25; 25 done, 0 in progress, 0 todo)
-- Project contract: withdraw funds (only owner) 
-- Project contract: claim project shares (only backers) 
+- Project contract: withdraw funds (only owner) [ X ]
+- Project contract: claim project shares (only backers) [ X ]
 - MongoDB Connection [ X ]
 - MongoDB Schema Definition [ X ]
 - Create a Project API [ X ]
